@@ -10,7 +10,7 @@ config_file = "../tools/trapmux_min.yml"
 
 fd = open(schema_file)
 schema = json.load(fd)
-print(json.dumps(schema, indent=4))
+print(json.dumps(schema, indent=2))
 
 fd = open(config_file)
 data = yaml.safe_load(fd)

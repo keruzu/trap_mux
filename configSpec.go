@@ -116,7 +116,7 @@ type trapexConfig struct {
 		LogCompress   bool   `default:"false" yaml:"compress_rotated_logs"`
 	}
 
-	TrapReceiverSettings trapListenerConfig `yaml:"trap_receiver_settings"`
+	TrapReceiverSettings trapListenerConfig `yaml:"listener"`
 
 	IpSets_str []map[string][]string `default:"{}" yaml:"ip_sets"`
 	IpSets     map[string]IpSet      `default:"{}"`
