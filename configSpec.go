@@ -102,7 +102,6 @@ type trapexConfig struct {
 	teConfigured bool
 
 	General struct {
-		Bongo      string `default:"bongo" yaml:"bongo"`
 		PluginPath string `default:"txPlugins" yaml:"plugin_path"`
 	}
 
