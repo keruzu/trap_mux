@@ -1,136 +1,150 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://github.com/keruzu/trap_mux/schema/trapmux.json",
-    "title": "TrapMux Configuration File",
-    "description": "TrapMux configuration management",
-    "type": "object",
-    "properties": {
-        "general": {
-            "type": "object",
-            "plugin_path": {
-                "type": "string",
-                "default": "txPlugins"
-            }
-        },
-        "logging": {
-            "type": "object",
-            "level": {
-                "type": "string",
-                "enum": [
-                    "trace",
-                    "debug",
-                    "info",
-                    "warning",
-                    "error",
-                    "critical"
-                ],
-                "default": "info"
-            },
-            "log_size_max": {
-                "type": "number",
-                "default": "1024"
-            },
-            "log_backups_max": {
-                "type": "integer",
-                "default": "7"
-            },
-            "log_age_max_days": {
-                "type": "integer"
-            },
-            "compress_rotated_logs": {
-                "type": "boolean",
-                "default": "true"
-            }
-        },
-        "reporting": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/keruzu/trap_mux/schema/trapmux.json",
+  "title": "TrapMux Configuration File",
+  "description": "TrapMux configuration management",
+  "type": "object",
+  "properties": {
+    "general": {
+      "type": "object",
+      "plugin_path": {
+        "type": "string",
+        "default": "txPlugins"
+      }
+    },
+    "logging": {
+      "type": "object",
+      "level": {
+        "type": "string",
+        "enum": [
+          "trace",
+          "debug",
+          "info",
+          "warning",
+          "error",
+          "critical"
+        ],
+        "default": "info"
+      },
+      "log_size_max": {
+        "type": "number",
+        "default": "1024"
+      },
+      "log_backups_max": {
+        "type": "integer",
+        "default": "7"
+      },
+      "log_age_max_days": {
+        "type": "integer"
+      },
+      "compress_rotated_logs": {
+        "type": "boolean",
+        "default": "true"
+      }
+    },
+    "reporting": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "plugin_args": {
             "type": "array",
             "items": {
-                "type": "object",
-                "properties": {
-                    "action": {
-                        "type": "string"
-                    },
-                    "plugin_args": {
-                        "type": "array",
-                        "items": {
-                            "key": {
-                                "type": "string"
-                            },
-                            "value": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
+              "key": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
             }
-
-        },
-        "listener": {
-            "type": "object",
-            "hostname": {
-"type": "string"
-},
-"listen_address": {
-"type": "string",
-"default": "0.0.0.0"
-},
-"listen_port": {
-"type": "number",
-"default": "162"
-},
-"gosnmp_debug": {
-"type": "boolean",
-"default": "false"
-},
-"gosnmp_debug_logfile_name": {
-"type": "string"
-},
-"snmp_community": {
-"type": "string"
-},
-"msg_flags": {
-"type": "string"
-},
-"username": {
-"type": "string"
-},
-"auth_protocol": {
-"type": "string"
-},
-"auth_password": {
-"type": "string"
-},
-"privacty_protocol": {
-"type": "string"
-},
-"privacy_password": {
-"type": "string"
-}
-        },
-        "ipsets": {
-            "type": "object"
-        },
-        "filters": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "action": {
-                        "type": "string"
-                    },
-                    "plugin_args": {
-                        "type": "array",
-                        "items": {
-                            "key": {
-                                "type": "string"
-                            },
-                            "value": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
+          }
         }
+      }
+    },
+    "listener": {
+      "type": "object",
+      "hostname": {
+        "type": "string"
+      },
+      "listen_address": {
+        "type": "string",
+        "default": "0.0.0.0"
+      },
+      "listen_port": {
+        "type": "number",
+        "default": "162"
+      },
+      "gosnmp_debug": {
+        "type": "boolean",
+        "default": "false"
+      },
+      "gosnmp_debug_logfile_name": {
+        "type": "string"
+      },
+      "snmp_community": {
+        "type": "string"
+      },
+      "msg_flags": {
+        "type": "string",
+        "enum": [
+          "NoAuthNoPriv",
+          "AuthNoPriv",
+          "AuthPriv"
+        ]
+      },
+      "username": {
+        "type": "string"
+      },
+      "auth_protocol": {
+        "type": "string",
+        "enum": [
+          "NoAuth",
+          "SHA",
+          "MD5"
+        ]
+      },
+      "auth_password": {
+        "type": "string"
+      },
+      "privacty_protocol": {
+        "type": "string",
+        "enum": [
+          "NoPriv",
+          "AES",
+          "DES"
+        ]
+      },
+      "privacy_password": {
+        "type": "string"
+      }
+    },
+    "ipsets": {
+      "type": "object"
+    },
+    "filters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "plugin_args": {
+            "type": "array",
+            "items": {
+              "key": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }
