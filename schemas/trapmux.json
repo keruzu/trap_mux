@@ -84,6 +84,14 @@
       "gosnmp_debug_logfile_name": {
         "type": "string"
       },
+      "ignore_versions": {
+        "type": "string",
+        "enum": [
+          "v1",
+          "v2c",
+          "v3"
+        ]
+      },
       "snmp_community": {
         "type": "string"
       },
@@ -107,9 +115,10 @@
         ]
       },
       "auth_password": {
-        "type": "string"
+        "type": "string",
+        "format": "password"
       },
-      "privacty_protocol": {
+      "privacy_protocol": {
         "type": "string",
         "enum": [
           "NoPriv",
@@ -118,7 +127,8 @@
         ]
       },
       "privacy_password": {
-        "type": "string"
+        "type": "string",
+        "format": "password"
       }
     },
     "ipsets": {
