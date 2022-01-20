@@ -32,7 +32,7 @@ class Validator(object):
     def buildOptions(self):
         self.parser.add_argument('--schema', default="trapmux.json",
                     help='JSON schema file')
-        self.parser.add_argument('--config', default="../tools/trapmux_min.yml",
+        self.parser.add_argument('--config', default="conf.yaml",
                     help='YAML configuration file')
 
         self.parser.add_argument('--fmt', default=False, action='store_true',

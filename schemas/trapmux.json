@@ -143,15 +143,10 @@
             "type": "string"
           },
           "plugin_args": {
-            "type": "array",
-            "items": {
-              "key": {
-                "type": "string"
-              },
-              "value": {
-                "type": "string"
-              }
-            }
+            "type": "object",
+   "additionalProperties": {
+"type": "string"
+}
           }
         }
       }
