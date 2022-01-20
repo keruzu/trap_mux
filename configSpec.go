@@ -50,10 +50,6 @@ type filterObj struct {
 }
 
 // Get in a set of action arg pairs, convert to a map to pass into plugins
-type ActionArgType struct {
-	Key   string `default:"" yaml:"key"`
-	Value string `default:"" yaml:"value"`
-}
 
 // trapexFilter holds the filter data and action for a specfic
 // filter line from the config file.
@@ -72,7 +68,7 @@ type trapexFilter struct {
 	ActionName    string          `default:"" yaml:"action"`
 	ActionArg     string          `default:"" yaml:"action_arg"`
 	BreakAfter    bool            `default:"false" yaml:"break_after"`
-	ActionArgs    []ActionArgType `default:"[]" yaml:"action_args"`
+	ActionArgs    map[string]string `default:"{}" yaml:"plugin_args"`
 
 	// Compiled definition of above
 	matchAll   bool
@@ -94,7 +90,7 @@ func (s *trapexFilter) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 type MetricConfig struct {
 	PluginName string          `default:"" yaml:"plugin"`
-	Args       []ActionArgType `default:"[]" yaml:"args"`
+	Args       map[string]string `default:"{}" yaml:"args"`
 	plugin     pluginLoader.MetricPlugin
 }
 

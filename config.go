@@ -348,29 +348,24 @@ func setAction(filter *trapexFilter, pluginPathExpr string, lineNumber int) erro
 		filter.actionType = actionBreak
 	case "nat":
 		filter.actionType = actionNat
-		if filter.ActionArg == "" {
-			pluginDataMapping := args2map(filter.ActionArgs)
-			natIp, ok := pluginDataMapping["natIp"]
-			if ok {
-				filter.ActionArg = natIp
-			} else {
+				filter.ActionArg = filter.ActionArgs["natIp"]
+if filter.ActionArg == "" {
 				return fmt.Errorf("missing NAT argument at line %v", lineNumber)
 			}
-		}
 	default:
 		filter.actionType = actionPlugin
 		filter.plugin, err = pluginLoader.LoadActionPlugin(pluginPathExpr, filter.ActionName)
 		if err != nil {
 			return fmt.Errorf("unable to load plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
-		pluginDataMapping := args2map(filter.ActionArgs)
-		if err = filter.plugin.Configure(&trapexLog, pluginDataMapping); err != nil {
+		if err = filter.plugin.Configure(&trapexLog, filter.ActionArgs); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
 	}
 	return nil
 }
 
+/*
 func args2map(data []ActionArgType) map[string]string {
 	pluginDataMapping := make(map[string]string)
 	for _, pair := range data {
@@ -387,6 +382,7 @@ func args2map(data []ActionArgType) map[string]string {
 	}
 	return pluginDataMapping
 }
+*/
 
 // addSnmpFilterObj adds a filter if necessary
 // An empty arry of filters is interpreted to mean "All versions should match"
@@ -495,8 +491,7 @@ func addReportingPlugins(newConfig *trapexConfig) error {
 			trapexLog.Fatal().Err(err).Str("plugin_name", config.PluginName).Msg("Unable to load metric reporting plugin")
 			return err
 		}
-		pluginDataMapping := args2map(config.Args)
-		if err = config.plugin.Configure(&trapexLog, pluginDataMapping, counters); err != nil {
+		if err = config.plugin.Configure(&trapexLog, config.Args, counters); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", config.PluginName, i, err)
 		}
 	}
