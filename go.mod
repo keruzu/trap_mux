@@ -9,6 +9,7 @@ require (
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/prometheus/client_golang v1.11.0
 	github.com/rs/zerolog v1.26.1 // indirect
+	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
