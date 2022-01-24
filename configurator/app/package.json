@@ -1,16 +1,14 @@
 {
-  "name": "react-jsonschema-form-example",
+  "name": "SNMP Trap MUX Configurator",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "Load, edit and save trapmux configurations",
+  "keywords": ["SNMP", "form", "configuration"],
   "main": "src/index.js",
   "dependencies": {
     "bootstrap": "",
-    "fs": "",
-    "lodash": "",
     "react": "",
     "react-dom": "",
-    "react-jsonschema-form": "",
+    "@rjsf/core": "",
     "react-scripts": ""
   },
   "devDependencies": {

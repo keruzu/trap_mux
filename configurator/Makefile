@@ -22,3 +22,5 @@ health:
 version:
 	curl -k http://localhost:$(PORT)/version && echo
 
+json:
+	python -m json.tool app/src/schema.json
