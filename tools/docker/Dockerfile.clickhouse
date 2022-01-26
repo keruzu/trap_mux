@@ -2,6 +2,6 @@
 FROM public.ecr.aws/n8z5j4d7/flowwow/clickhouse:latest
 
 COPY tools/docker/root_vimrc /root/.vimrc
-COPY tools/trapex.sql /docker-entrypoint-initdb.d
+COPY tools/trapmux.sql /docker-entrypoint-initdb.d
 
 

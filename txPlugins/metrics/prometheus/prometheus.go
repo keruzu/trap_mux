@@ -26,8 +26,8 @@ type prometheusStats struct {
 	counters []prometheus.Counter
 }
 
-func (p *prometheusStats) Configure(trapexLog *zerolog.Logger, args map[string]string, metric_definitions []pluginMeta.MetricDef) error {
-	p.main_log = trapexLog
+func (p *prometheusStats) Configure(pluginLog *zerolog.Logger, args map[string]string, metric_definitions []pluginMeta.MetricDef) error {
+	p.main_log = pluginLog
 	listenIP := args["listen_ip"]
 	listenPort := args["listen_port"]
 	p.listenAddress = listenIP + ":" + listenPort

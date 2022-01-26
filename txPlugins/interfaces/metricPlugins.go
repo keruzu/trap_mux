@@ -14,7 +14,7 @@ import (
 )
 
 type MetricPlugin interface {
-	Configure(trapexLog *zerolog.Logger, args map[string]string, metric_definitions []pluginMeta.MetricDef) error
+	Configure(pluginLog *zerolog.Logger, args map[string]string, metric_definitions []pluginMeta.MetricDef) error
 	Inc(int)
 	Report() (string, error)
 }

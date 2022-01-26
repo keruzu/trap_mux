@@ -8,12 +8,12 @@ EXPOSE 80
 #     https://pkgs.alpinelinux.org/packages?page=2&branch=edge
 RUN apk add --no-cache --upgrade bash && apk add net-snmp-tools
 
-RUN mkdir -p /opt/trapex/bin /opt/trapex/etc /opt/trapex/log
-COPY trapex /opt/trapex/bin
-COPY tools/trapex.yml /opt/trapex/etc
+RUN mkdir -p /opt/trapmux/bin /opt/trapmux/etc /opt/trapmux/log
+COPY trapmux /opt/trapmux/bin
+COPY tools/trapmux.yml /opt/trapmux/etc
 
 # Install root bash history
 COPY tools/docker/root_bash_history /root/.bash_history
 COPY tools/docker/root_vimrc /root/.vimrc
 
-CMD ["/opt/trapex/bin/trapex", "-c", "/opt/trapex/etc/trapex.yml"]
+CMD ["/opt/trapmux/bin/trapmux", "-c", "/opt/trapmux/etc/trapmux.yml"]

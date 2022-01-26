@@ -15,7 +15,7 @@ import (
 
 // Filter action plugin interface
 type ActionPlugin interface {
-	Configure(trapexLog *zerolog.Logger, actionArgs map[string]string) error
+	Configure(pluginLog *zerolog.Logger, actionArgs map[string]string) error
 	ProcessTrap(trap *pluginMeta.Trap) error
 	SigUsr1() error
 	SigUsr2() error
