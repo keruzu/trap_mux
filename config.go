@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+"net/http"
 
 	pluginMeta "github.com/damienstuart/trapex/txPlugins"
 	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
@@ -76,7 +77,12 @@ func processCommandLine() {
 		os.Exit(0)
 	}
 
+        uri := os.Getenv("TRAPMUX_CONFIG_URI")
+        if uri != "" {
+	teCmdLine.configFile = uri
+} else {
 	teCmdLine.configFile = *c
+        }
 	teCmdLine.bindAddr = *b
 	teCmdLine.listenPort = *p
 	teCmdLine.debugMode = *d
@@ -89,11 +95,28 @@ func loadConfig(config_file string, newConfig *trapexConfig) error {
 
 	newConfig.IpSets = make(map[string]IpSet)
 
-	filename, _ := filepath.Abs(config_file)
-	yamlFile, err := ioutil.ReadFile(filename)
+var yamlFile []byte
+var err error
+
+if strings.HasPrefix(config_file, "http") {
+var response *http.Response
+response, err = http.Get(config_file)
 	if err != nil {
 		return err
 	}
+yamlFile := make([]byte, response.ContentLength)
+_, err = response.Body.Read(yamlFile)
+	if err != nil {
+		return err
+	}
+
+} else {
+	filename, _ := filepath.Abs(config_file)
+	yamlFile, err = ioutil.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+}
 	err = yaml.UnmarshalStrict(yamlFile, newConfig)
 	if err != nil {
 		return err
