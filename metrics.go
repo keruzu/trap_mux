@@ -6,7 +6,7 @@
 package main
 
 import (
-	pluginMeta "github.com/kkearne/trap_mux/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 )
 
 // These constants should be in the same order as the createMetricDefs function returns them

@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"net"
 
-	pluginMeta "github.com/kkearne/trap_mux/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	g "github.com/gosnmp/gosnmp"
 )
 

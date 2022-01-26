@@ -1,4 +1,5 @@
 // Copyright (c) 2021 Damien Stuart. All rights reserved.
+// Copyright (c) 2022 Kells Kearney. All rights reserved.
 //
 // Use of this source code is governed by the MIT License that can be found
 // in the LICENSE file.
@@ -19,7 +20,7 @@ import (
 	"sync"
 	"time"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
 	"github.com/rs/zerolog"
 )

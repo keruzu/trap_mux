@@ -15,8 +15,8 @@ import (
 	"regexp"
 	"strings"
 
-	pluginMeta "github.com/kkearne/trap_mux/txPlugins"
-	pluginLoader "github.com/kkearne/trap_mux/txPlugins/interfaces"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
+	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
 
 	"github.com/creasty/defaults"
 	g "github.com/gosnmp/gosnmp"

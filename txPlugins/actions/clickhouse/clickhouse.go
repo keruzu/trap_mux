@@ -1,4 +1,5 @@
 // Copyright (c) 2021 Damien Stuart. All rights reserved.
+// Copyright (c) 2022 Kells Kearney. All rights reserved.
 //
 // Use of this source code is governed by the MIT License that can be found
 // in the LICENSE file.
@@ -15,7 +16,7 @@ import (
 	"os"
 	"strings"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	"github.com/rs/zerolog"
 
 	"github.com/natefinch/lumberjack"
@@ -30,7 +31,7 @@ type ClickhouseExport struct {
 	logHandle *log.Logger
 	isBroken  bool
 
-	trapex_log *zerolog.Logger
+	main_log *zerolog.Logger
 }
 
 // makeCsvLogger initializes and returns a lumberjack.Logger (logger with
@@ -54,12 +55,12 @@ func validateArguments(actionArgs map[string]string) error {
 	return nil
 }
 
-func (a *ClickhouseExport) Configure(trapexLog *zerolog.Logger, actionArgs map[string]string) error {
+func (a *ClickhouseExport) Configure(pluginLog *zerolog.Logger, actionArgs map[string]string) error {
 	if err := validateArguments(actionArgs); err != nil {
 		return err
 	}
 
-	a.trapex_log = trapexLog
+	a.main_log = pluginLog
 
 	a.logFile = actionArgs["filename"]
 	fd, err := os.OpenFile(a.logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -72,7 +73,7 @@ func (a *ClickhouseExport) Configure(trapexLog *zerolog.Logger, actionArgs map[s
 		Filename: a.logFile,
 	}
 	a.logHandle.SetOutput(&a.logger)
-	a.trapex_log.Info().Str("logfile", a.logFile).Msg("Added Clickhouse CSV log destination")
+	a.main_log.Info().Str("logfile", a.logFile).Msg("Added Clickhouse CSV log destination")
 
 	return nil
 }
@@ -97,7 +98,7 @@ func (a ClickhouseExport) SigUsr2() error {
 	fmt.Println("SigUsr2")
 	a.logger.Rotate()
 
-	a.trapex_log.Info().Str("logfile", a.logFile).Msg("Rotated Clickhouse CSV file")
+	a.main_log.Info().Str("logfile", a.logFile).Msg("Rotated Clickhouse CSV file")
 	return nil
 }
 

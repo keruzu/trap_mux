@@ -1,4 +1,4 @@
-module github.com/damienstuart/trapex
+module github.com/keruzu/trapmux
 
 go 1.16
 

@@ -11,12 +11,12 @@ package main
 
 import (
 	"fmt"
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	"github.com/rs/zerolog"
 )
 
 type kinesisConfig struct {
-	trapexLog *zerolog.Logger
+	pluginLog *zerolog.Logger
 }
 
 const pluginName = "AWS Kinesis"
@@ -33,9 +33,9 @@ func validateArguments(actionArgs map[string]string) error {
 	return nil
 }
 
-func (p *kinesisConfig) Configure(trapexLog *zerolog.Logger, actionArgs map[string]string) error {
-	trapexLog.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
-	p.trapexLog = trapexLog
+func (p *kinesisConfig) Configure(pluginLog *zerolog.Logger, actionArgs map[string]string) error {
+	pluginLog.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
+	p.pluginLog = pluginLog
 	if err := validateArguments(actionArgs); err != nil {
 		return err
 	}
@@ -44,7 +44,7 @@ func (p *kinesisConfig) Configure(trapexLog *zerolog.Logger, actionArgs map[stri
 }
 
 func (p kinesisConfig) ProcessTrap(trap *pluginMeta.Trap) error {
-	p.trapexLog.Info().Str("plugin", pluginName).Msg("Noop processing trap")
+	p.pluginLog.Info().Str("plugin", pluginName).Msg("Noop processing trap")
 	return nil
 }
 

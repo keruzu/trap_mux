@@ -14,7 +14,7 @@ import (
 	"fmt"
 	"os"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
 	"github.com/rs/zerolog"
 )
@@ -24,7 +24,7 @@ type trapCapture struct {
 	fileExpr   string
 	fileFormat string
 	counter    int
-	trapex_log *zerolog.Logger
+	main_log *zerolog.Logger
 }
 
 const pluginName = "trap capture"
@@ -42,10 +42,10 @@ func validateArguments(actionArgs map[string]string) error {
 	return nil
 }
 
-func (a *trapCapture) Configure(trapexLog *zerolog.Logger, actionArgs map[string]string) error {
-	a.trapex_log = trapexLog
+func (a *trapCapture) Configure(pluginLog *zerolog.Logger, actionArgs map[string]string) error {
+	a.main_log = pluginLog
 
-	a.trapex_log.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
+	a.main_log.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
 
 	if err := validateArguments(actionArgs); err != nil {
 		return err
@@ -63,13 +63,13 @@ func (a *trapCapture) Configure(trapexLog *zerolog.Logger, actionArgs map[string
 	if a.fileFormat == "" {
 		a.fileFormat = "gob"
 	}
-	a.trapex_log.Info().Str("file_expr", a.fileExpr).Str("dir", a.dir).Msg("Added capture destination")
+	a.main_log.Info().Str("file_expr", a.fileExpr).Str("dir", a.dir).Msg("Added capture destination")
 
 	return nil
 }
 
 func (a *trapCapture) ProcessTrap(trap *pluginMeta.Trap) error {
-	a.trapex_log.Info().Str("plugin", pluginName).Msg("Processing trap")
+	a.main_log.Info().Str("plugin", pluginName).Msg("Processing trap")
 	var filename string
 	var err error
 

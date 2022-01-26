@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"os"
 
-	pluginLoader "github.com/kkearne/trap_mux/txPlugins/interfaces"
+	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
 )
 
 // On SIGHUP we reload the configuration.

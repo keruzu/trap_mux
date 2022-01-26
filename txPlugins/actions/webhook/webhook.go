@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Damien Stuart. All rights reserved.
+// Copyright (c) 2022 Kells Kearney. All rights reserved.
 //
 // Use of this source code is governed by the MIT License that can be found
 // in the LICENSE file.
@@ -18,14 +18,14 @@ import (
 	   "bytes"
 	*/
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	"github.com/rs/zerolog"
 )
 
 type webhookForwarder struct {
 	url       string
 	timeout   uint
-	trapexLog *zerolog.Logger
+	pluginLog *zerolog.Logger
 }
 
 const pluginName = "webhook"
@@ -41,27 +41,27 @@ func validateArguments(actionArgs map[string]string) error {
 	return nil
 }
 
-func (a *webhookForwarder) Configure(trapexLog *zerolog.Logger, actionArgs map[string]string) error {
-	a.trapexLog = trapexLog
+func (a *webhookForwarder) Configure(pluginLog *zerolog.Logger, actionArgs map[string]string) error {
+	a.pluginLog = pluginLog
 
-	a.trapexLog.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
+	a.pluginLog.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
 	if err := validateArguments(actionArgs); err != nil {
 		return err
 	}
 	a.url = actionArgs["url"]
-	a.trapexLog.Info().Str("url", a.url).Msg("Added webhook destination")
+	a.pluginLog.Info().Str("url", a.url).Msg("Added webhook destination")
 	return nil
 }
 
 func (a webhookForwarder) ProcessTrap(trap *pluginMeta.Trap) error {
-	a.trapexLog.Info().Str("plugin", pluginName).Msg("Processing HTTP post -- fake")
+	a.pluginLog.Info().Str("plugin", pluginName).Msg("Processing HTTP post -- fake")
 	trapMap := trap.Trap2Map()
 	jsonBytes, err := json.Marshal(trapMap)
 	if err != nil {
 		return err
 	}
 
-	a.trapexLog.Info().Str("plugin", pluginName).Str("json", string(jsonBytes[:])).Msg("Converted trap to JSON")
+	a.pluginLog.Info().Str("plugin", pluginName).Str("json", string(jsonBytes[:])).Msg("Converted trap to JSON")
 	/*
 	   body := new(bytes.Buffer)
 	   trap.toJson(&body)
@@ -75,9 +75,9 @@ func (a webhookForwarder) ProcessTrap(trap *pluginMeta.Trap) error {
 	   }
 
 	   defer result.Body.Close()
-	   a.trapex_log.Info().Str("url", a.url).Int("http_status", result.Status).Msg("Webhook HTTP status")
+	   a.main_log.Info().Str("url", a.url).Int("http_status", result.Status).Msg("Webhook HTTP status")
 	   if result.Status == 200 {
-	   a.trapex_log.Info().Str("url", a.url).Str("body, result.Body).Msg("Webhook HTTP result")
+	   a.main_log.Info().Str("url", a.url).Str("body, result.Body).Msg("Webhook HTTP result")
 	   } else {
 	   return error.New("Unable to forward to webhook server")
 	*/

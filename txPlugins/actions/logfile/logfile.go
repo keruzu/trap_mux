@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	g "github.com/gosnmp/gosnmp"
 	"github.com/natefinch/lumberjack"
 	"github.com/rs/zerolog"
@@ -43,7 +43,7 @@ type trapLogger struct {
 	logHandle *log.Logger
 	isBroken  bool
 
-	trapexLog *zerolog.Logger
+	pluginLog *zerolog.Logger
 }
 
 const pluginName = "trap logger"
@@ -88,10 +88,10 @@ func validateArguments(actionArgs map[string]string) error {
 	return nil
 }
 
-func (a *trapLogger) Configure(trapexLog *zerolog.Logger, actionArgs map[string]string) error {
+func (a *trapLogger) Configure(pluginLog *zerolog.Logger, actionArgs map[string]string) error {
 	var ok bool
-	a.trapexLog = trapexLog
-	a.trapexLog.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
+	a.pluginLog = pluginLog
+	a.pluginLog.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
 
 	if err := validateArguments(actionArgs); err != nil {
 		return err
@@ -108,7 +108,7 @@ func (a *trapLogger) Configure(trapexLog *zerolog.Logger, actionArgs map[string]
 	a.fd = fd
 	a.logHandle = log.New(fd, "", 0)
 	a.logHandle.SetOutput(makeLogger(a.logFile, actionArgs))
-	a.trapexLog.Info().Str("logfile", a.logFile).Msg("Added log destination")
+	a.pluginLog.Info().Str("logfile", a.logFile).Msg("Added log destination")
 	return nil
 }
 

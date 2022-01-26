@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"net/http"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
 	"github.com/rs/zerolog"
 
@@ -18,7 +18,7 @@ import (
 )
 
 type prometheusStats struct {
-	trapex_log *zerolog.Logger
+	main_log *zerolog.Logger
 
 	listenAddress string
 	endpoint      string
@@ -27,7 +27,7 @@ type prometheusStats struct {
 }
 
 func (p *prometheusStats) Configure(trapexLog *zerolog.Logger, args map[string]string, metric_definitions []pluginMeta.MetricDef) error {
-	p.trapex_log = trapexLog
+	p.main_log = trapexLog
 	listenIP := args["listen_ip"]
 	listenPort := args["listen_port"]
 	p.listenAddress = listenIP + ":" + listenPort
@@ -41,7 +41,7 @@ func (p *prometheusStats) Configure(trapexLog *zerolog.Logger, args map[string]s
 	}
 
 	exporter := fmt.Sprintf("http://%s/%s", p.listenAddress, p.endpoint)
-	p.trapex_log.Info().Str("endpoint", exporter).Msg("Prometheus metrics exporter")
+	p.main_log.Info().Str("endpoint", exporter).Msg("Prometheus metrics exporter")
 
 	go exposeMetrics(p.endpoint, p.listenAddress)
 

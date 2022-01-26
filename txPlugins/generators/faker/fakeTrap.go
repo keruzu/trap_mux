@@ -51,12 +51,12 @@ func processTestTraps(newConfig *testDataSpec) error {
 	/*
 		for _, stanza := range newConfig.IpSets_str {
 			for ipsName, ips := range stanza {
-				trapexLog.Debug().Str("ipset", ipsName).Msg("Loading IpSet")
+				pluginLog.Debug().Str("ipset", ipsName).Msg("Loading IpSet")
 				newConfig.IpSets[ipsName] = make(map[string]bool)
 				for _, ip := range ips {
 					if ipRe.MatchString(ip) {
 						newConfig.IpSets[ipsName][ip] = true
-						trapexLog.Debug().Str("ipset", ipsName).Str("ip", ip).Msg("Adding IP to IpSet")
+						pluginLog.Debug().Str("ipset", ipsName).Str("ip", ip).Msg("Adding IP to IpSet")
 					} else {
 						return fmt.Errorf("Invalid IP address (%s) in ipset: %s", ip, ipsName)
 					}

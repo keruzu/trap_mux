@@ -20,7 +20,7 @@ import (
 	"strings"
 	"time"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	g "github.com/gosnmp/gosnmp"
 
 	"github.com/rs/zerolog"
@@ -28,7 +28,7 @@ import (
 
 type trapForwarder struct {
 	destination *g.GoSNMP
-	trapex_log  *zerolog.Logger
+	main_log  *zerolog.Logger
 }
 
 const pluginName = "trap forwarder"
@@ -63,10 +63,10 @@ func getVersion(snmpVersion string) (g.SnmpVersion, error) {
 	}
 }
 
-func (a *trapForwarder) Configure(trapexLog *zerolog.Logger, actionArgs map[string]string) error {
-	a.trapex_log = trapexLog
+func (a *trapForwarder) Configure(pluginLog *zerolog.Logger, actionArgs map[string]string) error {
+	a.main_log = pluginLog
 
-	a.trapex_log.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
+	a.main_log.Info().Str("plugin", pluginName).Msg("Initialization of plugin")
 
 	snmpVersion, err := getVersion(actionArgs["version"])
 	if err != nil {
@@ -100,7 +100,7 @@ func (a *trapForwarder) Configure(trapexLog *zerolog.Logger, actionArgs map[stri
 	if err != nil {
 		return err
 	}
-	a.trapex_log.Info().Str("target", hostname).Str("port", port_str).Msg("Added trap destination")
+	a.main_log.Info().Str("target", hostname).Str("port", port_str).Msg("Added trap destination")
 
 	return nil
 }
@@ -174,7 +174,7 @@ func (a trapForwarder) ProcessTrap(trap *pluginMeta.Trap) error {
 		}
 	}
 
-	a.trapex_log.Info().Str("plugin", pluginName).Msg("Processing trap")
+	a.main_log.Info().Str("plugin", pluginName).Msg("Processing trap")
 	_, err := a.destination.SendTrap(trap.Data)
 	return err
 }

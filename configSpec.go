@@ -7,7 +7,7 @@ package main
 
 import (
 	"github.com/creasty/defaults"
-	pluginLoader "github.com/kkearne/trap_mux/txPlugins/interfaces"
+	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
 	g "github.com/gosnmp/gosnmp"
 )
 

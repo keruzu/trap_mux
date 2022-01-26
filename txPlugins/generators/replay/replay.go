@@ -18,7 +18,7 @@ import (
 	"strconv"
 	"strings"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
 	"github.com/rs/zerolog"
 )
