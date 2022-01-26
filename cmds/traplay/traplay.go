@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 	"path/filepath"
 
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"

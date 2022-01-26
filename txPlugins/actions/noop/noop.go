@@ -11,7 +11,7 @@ testing purposes.
 */
 
 import (
-	pluginMeta "github.com/keruzu/trapex/txPlugins"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	"github.com/rs/zerolog"
 )
 
