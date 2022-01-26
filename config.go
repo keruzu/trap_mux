@@ -9,11 +9,11 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
-"net/http"
 
 	pluginMeta "github.com/damienstuart/trapex/txPlugins"
 	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
@@ -77,12 +77,12 @@ func processCommandLine() {
 		os.Exit(0)
 	}
 
-        uri := os.Getenv("TRAPMUX_CONFIG_URI")
-        if uri != "" {
-	teCmdLine.configFile = uri
-} else {
-	teCmdLine.configFile = *c
-        }
+	uri := os.Getenv("TRAPMUX_CONFIG_URI")
+	if uri != "" {
+		teCmdLine.configFile = uri
+	} else {
+		teCmdLine.configFile = *c
+	}
 	teCmdLine.bindAddr = *b
 	teCmdLine.listenPort = *p
 	teCmdLine.debugMode = *d
@@ -95,28 +95,28 @@ func loadConfig(config_file string, newConfig *trapexConfig) error {
 
 	newConfig.IpSets = make(map[string]IpSet)
 
-var yamlFile []byte
-var err error
+	var yamlFile []byte
+	var err error
 
-if strings.HasPrefix(config_file, "http") {
-var response *http.Response
-response, err = http.Get(config_file)
-	if err != nil {
-		return err
-	}
-yamlFile := make([]byte, response.ContentLength)
-_, err = response.Body.Read(yamlFile)
-	if err != nil {
-		return err
-	}
+	if strings.HasPrefix(config_file, "http") {
+		var response *http.Response
+		response, err = http.Get(config_file)
+		if err != nil {
+			return err
+		}
+		yamlFile := make([]byte, response.ContentLength)
+		_, err = response.Body.Read(yamlFile)
+		if err != nil {
+			return err
+		}
 
-} else {
-	filename, _ := filepath.Abs(config_file)
-	yamlFile, err = ioutil.ReadFile(filename)
-	if err != nil {
-		return err
+	} else {
+		filename, _ := filepath.Abs(config_file)
+		yamlFile, err = ioutil.ReadFile(filename)
+		if err != nil {
+			return err
+		}
 	}
-}
 	err = yaml.UnmarshalStrict(yamlFile, newConfig)
 	if err != nil {
 		return err
@@ -371,10 +371,10 @@ func setAction(filter *trapexFilter, pluginPathExpr string, lineNumber int) erro
 		filter.actionType = actionBreak
 	case "nat":
 		filter.actionType = actionNat
-				filter.ActionArg = filter.ActionArgs["natIp"]
-if filter.ActionArg == "" {
-				return fmt.Errorf("missing NAT argument at line %v", lineNumber)
-			}
+		filter.ActionArg = filter.ActionArgs["natIp"]
+		if filter.ActionArg == "" {
+			return fmt.Errorf("missing NAT argument at line %v", lineNumber)
+		}
 	default:
 		filter.actionType = actionPlugin
 		filter.plugin, err = pluginLoader.LoadActionPlugin(pluginPathExpr, filter.ActionName)

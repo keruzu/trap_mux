@@ -64,10 +64,10 @@ type trapexFilter struct {
 	// SpecificType can have values from 0 - n: -1 indicates all types
 	SpecificType int `default:"-1" yaml:"snmp_specific_type"`
 
-	EnterpriseOid string          `default:"" yaml:"enterprise_oid"`
-	ActionName    string          `default:"" yaml:"action"`
-	ActionArg     string          `default:"" yaml:"action_arg"`
-	BreakAfter    bool            `default:"false" yaml:"break_after"`
+	EnterpriseOid string            `default:"" yaml:"enterprise_oid"`
+	ActionName    string            `default:"" yaml:"action"`
+	ActionArg     string            `default:"" yaml:"action_arg"`
+	BreakAfter    bool              `default:"false" yaml:"break_after"`
 	ActionArgs    map[string]string `default:"{}" yaml:"plugin_args"`
 
 	// Compiled definition of above
@@ -89,7 +89,7 @@ func (s *trapexFilter) UnmarshalYAML(unmarshal func(interface{}) error) error {
 }
 
 type MetricConfig struct {
-	PluginName string          `default:"" yaml:"plugin"`
+	PluginName string            `default:"" yaml:"plugin"`
 	Args       map[string]string `default:"{}" yaml:"args"`
 	plugin     pluginLoader.MetricPlugin
 }
