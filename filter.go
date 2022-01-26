@@ -10,8 +10,8 @@ import (
 	"regexp"
 	"strings"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
-	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
+	pluginMeta "github.com/kkearne/trap_mux/txPlugins"
+	pluginLoader "github.com/kkearne/trap_mux/txPlugins/interfaces"
 )
 
 // Filter types
@@ -42,10 +42,10 @@ const (
 	actionPlugin
 )
 
-// isFilterMatch checks trap data against a trapexFilter and returns a boolean
+// isFilterMatch checks trap data against a trapmuxFilter and returns a boolean
 // to indicate whether or not the trap data matches the filter criteria.
 //
-func (f *trapexFilter) isFilterMatch(sgt *pluginMeta.Trap) bool {
+func (f *trapmuxFilter) isFilterMatch(sgt *pluginMeta.Trap) bool {
 	if len(f.matchers) == 0 {
 		return true
 	}
@@ -104,9 +104,9 @@ func (f *trapexFilter) isFilterMatch(sgt *pluginMeta.Trap) bool {
 }
 
 // processAction handles the execution of the action for the
-// trapexFilter instance on the the given trap data.
+// trapmuxFilter instance on the the given trap data.
 //
-func (f *trapexFilter) processAction(trap *pluginMeta.Trap) error {
+func (f *trapmuxFilter) processAction(trap *pluginMeta.Trap) error {
 	var err error
 
 	switch f.actionType {
@@ -121,10 +121,10 @@ func (f *trapexFilter) processAction(trap *pluginMeta.Trap) error {
 	case actionPlugin:
 		err = f.plugin.(pluginLoader.ActionPlugin).ProcessTrap(trap)
 		if err != nil {
-			trapexLog.Err(err).Str("plugin", f.ActionName).Msg("Issue in processing trap by plugin")
+			trapmuxLog.Err(err).Str("plugin", f.ActionName).Msg("Issue in processing trap by plugin")
 		}
 	default:
-		trapexLog.Warn().Int("action_type", f.actionType).Msg("Unkown action type given to processAction")
+		trapmuxLog.Warn().Int("action_type", f.actionType).Msg("Unkown action type given to processAction")
 	}
 	if f.BreakAfter {
 		trap.Dropped = true

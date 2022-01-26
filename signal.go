@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"os"
 
-	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
+	pluginLoader "github.com/kkearne/trap_mux/txPlugins/interfaces"
 )
 
 // On SIGHUP we reload the configuration.
@@ -20,7 +20,7 @@ func handleSIGHUP(sigCh chan os.Signal) {
 		case <-sigCh:
 			fmt.Printf("Got SIGHUP - Reloading configuration.\n")
 			if err := getConfig(); err != nil {
-				trapexLog.Info().Err(err).Msg("Error parsing configuration\nConfiguration was not changed")
+				trapmuxLog.Info().Err(err).Msg("Error parsing configuration\nConfiguration was not changed")
 			}
 		}
 	}
@@ -32,7 +32,7 @@ func handleSIGUSR2(sigCh chan os.Signal) {
 	for {
 		select {
 		case <-sigCh:
-			trapexLog.Info().Msg("Got SIGUSR2")
+			trapmuxLog.Info().Msg("Got SIGUSR2")
 			for _, f := range teConfig.Filters {
 				if f.actionType == actionPlugin {
 					f.plugin.(pluginLoader.ActionPlugin).SigUsr2()

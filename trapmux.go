@@ -17,11 +17,11 @@ import (
 
 	"github.com/rs/zerolog"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
-	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
+	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
 )
 
-var trapexLog = zerolog.New(os.Stdout).With().Timestamp().Logger()
+var trapmuxLog = zerolog.New(os.Stdout).With().Timestamp().Logger()
 
 func main() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
@@ -35,7 +35,7 @@ func main() {
 	processCommandLine()
 
 	if err := getConfig(); err != nil {
-		trapexLog.Fatal().Err(err).Msg("Unable to load configuration")
+		trapmuxLog.Fatal().Err(err).Msg("Unable to load configuration")
 		os.Exit(1)
 	}
 
@@ -55,13 +55,13 @@ func startTrapListener() {
 	trapListener.OnNewTrap = trapHandler
 
 	if teConfig.TrapReceiverSettings.GoSnmpDebug {
-		trapexLog.Info().Msg("gosnmp debug mode enabled")
+		trapmuxLog.Info().Msg("gosnmp debug mode enabled")
 		if teConfig.TrapReceiverSettings.GoSnmpDebugLogName == "" {
 			trapListener.Params.Logger = g.NewLogger(log.New(os.Stdout, "", 0))
 		} else {
 			fd, err := os.Open(teConfig.TrapReceiverSettings.GoSnmpDebugLogName)
 			if err != nil {
-				trapexLog.Fatal().Err(err).Str("filename", teConfig.TrapReceiverSettings.GoSnmpDebugLogName).Msg("Unable to open up debug log")
+				trapmuxLog.Fatal().Err(err).Str("filename", teConfig.TrapReceiverSettings.GoSnmpDebugLogName).Msg("Unable to open up debug log")
 				os.Exit(1)
 			}
 			trapListener.Params.Logger = g.NewLogger(log.New(fd, "", 0))
@@ -84,7 +84,7 @@ func startTrapListener() {
 	}
 
 	listenAddr := fmt.Sprintf("%s:%s", teConfig.TrapReceiverSettings.ListenAddr, teConfig.TrapReceiverSettings.ListenPort)
-	trapexLog.Info().Str("listen_address", listenAddr).Msg("Start trapex listener")
+	trapmuxLog.Info().Str("listen_address", listenAddr).Msg("Start trapmux listener")
 	err := trapListener.Listen(listenAddr)
 	if err != nil {
 		log.Panicf("error in listen on %s: %s", listenAddr, err)
@@ -146,7 +146,7 @@ func trapHandler(p *g.SnmpPacket, addr *net.UDPAddr) {
 	if teConfig.Logging.Level == "debug" {
 		var info string
 		info = makeTrapLogEntry(&trap)
-		trapexLog.Debug().Str("trap", info).Msg("Raw trap info")
+		trapmuxLog.Debug().Str("trap", info).Msg("Raw trap info")
 	}
 
 	processTrap(&trap)

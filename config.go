@@ -15,8 +15,8 @@ import (
 	"regexp"
 	"strings"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
-	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
+	pluginMeta "github.com/kkearne/trap_mux/txPlugins"
+	pluginLoader "github.com/kkearne/trap_mux/txPlugins/interfaces"
 
 	"github.com/creasty/defaults"
 	g "github.com/gosnmp/gosnmp"
@@ -35,7 +35,7 @@ Notes on YAML configuration processing:
    ===========================================================
 */
 
-type trapexCommandLine struct {
+type trapmuxCommandLine struct {
 	configFile string
 	bindAddr   string
 	listenPort string
@@ -44,27 +44,27 @@ type trapexCommandLine struct {
 
 // Global vars
 //
-var teConfig *trapexConfig
-var teCmdLine trapexCommandLine
+var teConfig *trapmuxConfig
+var teCmdLine trapmuxCommandLine
 var ipRe = regexp.MustCompile(`^(?:\d{1,3}\.){3}\d{1,3}$`)
 
 func showUsage() {
 	usageText := `
-Usage: trapex [-h] [-c <config_file>] [-b <bind_ip>] [-p <listen_port>]
+Usage: trapmux [-h] [-c <config_file>] [-b <bind_ip>] [-p <listen_port>]
               [-d] [-v]
   -h  - Show this help message and exit.
-  -c  - Override the location of the trapex configuration file.
+  -c  - Override the location of the trapmux configuration file.
   -b  - Override the bind IP address on which to listen for incoming traps.
   -p  - Override the UDP port on which to listen for incoming traps.
   -d  - Enable debug mode (note: produces very verbose runtime output).
-  -v  - Print the version of trapex and exit.
+  -v  - Print the version of trapmux and exit.
 `
 	fmt.Println(usageText)
 }
 
 func processCommandLine() {
 	flag.Usage = showUsage
-	c := flag.String("c", "/opt/trapex/etc/trapex.yml", "")
+	c := flag.String("c", "/opt/trapmux/etc/trapmux.yml", "")
 	b := flag.String("b", "", "")
 	p := flag.String("p", "", "")
 	d := flag.Bool("d", false, "")
@@ -73,7 +73,7 @@ func processCommandLine() {
 	flag.Parse()
 
 	if *showVersion {
-		fmt.Printf("This is trapex version %s\n", myVersion)
+		fmt.Printf("This is trapmux version %s\n", myVersion)
 		os.Exit(0)
 	}
 
@@ -90,7 +90,7 @@ func processCommandLine() {
 
 // loadConfig
 // Load a YAML file with configuration, and create a new object
-func loadConfig(config_file string, newConfig *trapexConfig) error {
+func loadConfig(config_file string, newConfig *trapmuxConfig) error {
 	defaults.Set(newConfig)
 
 	newConfig.IpSets = make(map[string]IpSet)
@@ -125,7 +125,7 @@ func loadConfig(config_file string, newConfig *trapexConfig) error {
 	return nil
 }
 
-func applyCliOverrides(newConfig *trapexConfig) {
+func applyCliOverrides(newConfig *trapmuxConfig) {
 	// Override the listen address:port if they were specified on the
 	// command line.  If not and the listener values were not set in
 	// the config file, fallback to defaults.
@@ -160,9 +160,9 @@ func getConfig() error {
 	} else {
 		operation = "Loading"
 	}
-	trapexLog.Info().Str("version", myVersion).Str("configuration_file", teCmdLine.configFile).Msg(operation + " configuration for trapex")
+	trapmuxLog.Info().Str("version", myVersion).Str("configuration_file", teCmdLine.configFile).Msg(operation + " configuration for trapmux")
 
-	var newConfig trapexConfig
+	var newConfig trapmuxConfig
 	err := loadConfig(teCmdLine.configFile, &newConfig)
 	if err != nil {
 		return err
@@ -202,7 +202,7 @@ func getConfig() error {
 	return nil
 }
 
-func validateIgnoreVersions(newConfig *trapexConfig) error {
+func validateIgnoreVersions(newConfig *trapmuxConfig) error {
 	var ignorev1, ignorev2c, ignorev3 bool = false, false, false
 	for _, candidate := range newConfig.TrapReceiverSettings.IgnoreVersions_str {
 		switch strings.ToLower(candidate) {
@@ -289,15 +289,15 @@ func validateSnmpV3Args(params *trapListenerConfig) error {
 	return nil
 }
 
-func addIpSets(newConfig *trapexConfig) error {
+func addIpSets(newConfig *trapmuxConfig) error {
 	for _, stanza := range newConfig.IpSets_str {
 		for ipsName, ips := range stanza {
-			trapexLog.Debug().Str("ipset", ipsName).Msg("Loading IpSet")
+			trapmuxLog.Debug().Str("ipset", ipsName).Msg("Loading IpSet")
 			newConfig.IpSets[ipsName] = make(map[string]bool)
 			for _, ip := range ips {
 				if ipRe.MatchString(ip) {
 					newConfig.IpSets[ipsName][ip] = true
-					trapexLog.Debug().Str("ipset", ipsName).Str("ip", ip).Msg("Adding IP to IpSet")
+					trapmuxLog.Debug().Str("ipset", ipsName).Str("ip", ip).Msg("Adding IP to IpSet")
 				} else {
 					return fmt.Errorf("invalid IP address (%s) in ipset: %s", ip, ipsName)
 				}
@@ -307,7 +307,7 @@ func addIpSets(newConfig *trapexConfig) error {
 	return nil
 }
 
-func addFilters(newConfig *trapexConfig) error {
+func addFilters(newConfig *trapmuxConfig) error {
 	var err error
 	for i, _ := range newConfig.Filters {
 		if err = addFilterObjs(&newConfig.Filters[i], newConfig.IpSets, i); err != nil {
@@ -317,11 +317,11 @@ func addFilters(newConfig *trapexConfig) error {
 			return err
 		}
 	}
-	trapexLog.Info().Int("num_filters", len(newConfig.Filters)).Msg("Configured filter conditions")
+	trapmuxLog.Info().Int("num_filters", len(newConfig.Filters)).Msg("Configured filter conditions")
 	return nil
 }
 
-func addPluginErrorActions(newConfig *trapexConfig) error {
+func addPluginErrorActions(newConfig *trapmuxConfig) error {
 	var err error
 	for i, _ := range newConfig.PluginErrorActions {
 		if err = addFilterObjs(&newConfig.PluginErrorActions[i], newConfig.IpSets, i); err != nil {
@@ -331,14 +331,14 @@ func addPluginErrorActions(newConfig *trapexConfig) error {
 			return err
 		}
 	}
-	trapexLog.Info().Int("num_filters", len(newConfig.PluginErrorActions)).Msg("Configured plugin error conditions")
+	trapmuxLog.Info().Int("num_filters", len(newConfig.PluginErrorActions)).Msg("Configured plugin error conditions")
 	return nil
 }
 
 // addFilterObjs parses a "filter" line and sets
-// the appropriate values in a corresponding trapexFilter struct.
+// the appropriate values in a corresponding trapmuxFilter struct.
 //
-func addFilterObjs(filter *trapexFilter, ipSets map[string]IpSet, lineNumber int) error {
+func addFilterObjs(filter *trapmuxFilter, ipSets map[string]IpSet, lineNumber int) error {
 	var err error
 
 	// If we find something that is specifies a condition, then reset
@@ -367,7 +367,7 @@ func addFilterObjs(filter *trapexFilter, ipSets map[string]IpSet, lineNumber int
 	return err
 }
 
-func setAction(filter *trapexFilter, pluginPathExpr string, lineNumber int) error {
+func setAction(filter *trapmuxFilter, pluginPathExpr string, lineNumber int) error {
 	var err error
 
 	switch filter.ActionName {
@@ -385,7 +385,7 @@ func setAction(filter *trapexFilter, pluginPathExpr string, lineNumber int) erro
 		if err != nil {
 			return fmt.Errorf("unable to load plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
-		if err = filter.plugin.Configure(&trapexLog, filter.ActionArgs); err != nil {
+		if err = filter.plugin.Configure(&trapmuxLog, filter.ActionArgs); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
 	}
@@ -400,7 +400,7 @@ func args2map(data []ActionArgType) map[string]string {
 			strings.Contains(pair.Key, "password") {
 			plaintext, err := pluginMeta.GetSecret(pair.Value)
 			if err != nil {
-				trapexLog.Warn().Err(err).Str("secret", pair.Key).Str("cipher_text", pair.Value).Msg("Unable to decode secret")
+				trapmuxLog.Warn().Err(err).Str("secret", pair.Key).Str("cipher_text", pair.Value).Msg("Unable to decode secret")
 			} else {
 				pair.Value = plaintext
 			}
@@ -413,7 +413,7 @@ func args2map(data []ActionArgType) map[string]string {
 
 // addSnmpFilterObj adds a filter if necessary
 // An empty arry of filters is interpreted to mean "All versions should match"
-func addSnmpFilterObj(filter *trapexFilter, lineNumber int) error {
+func addSnmpFilterObj(filter *trapmuxFilter, lineNumber int) error {
 	for _, candidate := range filter.SnmpVersions {
 		fObj := filterObj{filterItem: filterByVersion}
 		switch strings.ToLower(candidate) {
@@ -436,7 +436,7 @@ func addSnmpFilterObj(filter *trapexFilter, lineNumber int) error {
 // addIpFilterObj returns a filter object for IP addresses, IP sets, CIDR
 // If starts with a "ipset:"" it's an IP set
 // If starts with a "/", it's a regex
-func addIpFilterObj(filter *trapexFilter, source int, networkEntry string, ipSets map[string]IpSet, lineNumber int) error {
+func addIpFilterObj(filter *trapmuxFilter, source int, networkEntry string, ipSets map[string]IpSet, lineNumber int) error {
 	var err error
 
 	if networkEntry == "" {
@@ -473,7 +473,7 @@ func addIpFilterObj(filter *trapexFilter, source int, networkEntry string, ipSet
 	return nil
 }
 
-func addTrapTypeFilterObj(filter *trapexFilter, source int, trapTypeEntry int, lineNumber int) error {
+func addTrapTypeFilterObj(filter *trapmuxFilter, source int, trapTypeEntry int, lineNumber int) error {
 	// -1 means to match everything
 	if trapTypeEntry == -1 {
 		return nil
@@ -484,7 +484,7 @@ func addTrapTypeFilterObj(filter *trapexFilter, source int, trapTypeEntry int, l
 	return nil
 }
 
-func addOidFilterObj(filter *trapexFilter, oid string, lineNumber int) error {
+func addOidFilterObj(filter *trapmuxFilter, oid string, lineNumber int) error {
 	var err error
 
 	if oid == "" {
@@ -508,20 +508,20 @@ func closeTrapexHandles() {
 	}
 }
 
-func addReportingPlugins(newConfig *trapexConfig) error {
+func addReportingPlugins(newConfig *trapmuxConfig) error {
 	var err error
 
 	counters := pluginMeta.CreateMetricDefs()
 	for i, config := range newConfig.Reporting {
 		config.plugin, err = pluginLoader.LoadMetricPlugin(teConfig.General.PluginPath, config.PluginName)
 		if err != nil {
-			trapexLog.Fatal().Err(err).Str("plugin_name", config.PluginName).Msg("Unable to load metric reporting plugin")
+			trapmuxLog.Fatal().Err(err).Str("plugin_name", config.PluginName).Msg("Unable to load metric reporting plugin")
 			return err
 		}
-		if err = config.plugin.Configure(&trapexLog, config.Args, counters); err != nil {
+		if err = config.plugin.Configure(&trapmuxLog, config.Args, counters); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", config.PluginName, i, err)
 		}
 	}
-	trapexLog.Info().Int("num_reporters", len(newConfig.Reporting)).Msg("Configured metric reporting plugins")
+	trapmuxLog.Info().Int("num_reporters", len(newConfig.Reporting)).Msg("Configured metric reporting plugins")
 	return nil
 }

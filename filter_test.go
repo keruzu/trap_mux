@@ -24,10 +24,10 @@ func TestPluginInterfacess(t *testing.T) {
 	}
 	/*
 	                   if err == nil {
-	                           filter.action.Configure(trapexLog, actionArg, &newConfig.FilterPluginsConfig)
+	                           filter.action.Configure(trapmuxLog, actionArg, &newConfig.FilterPluginsConfig)
 	                   }
 
-	   	var testConfig trapexConfig
+	   	var testConfig trapmuxConfig
 	   	loadConfig("tests/config/general.yml", &testConfig)
 	*/
 

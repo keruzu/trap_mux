@@ -7,7 +7,7 @@ package main
 
 import (
 	"github.com/creasty/defaults"
-	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
+	pluginLoader "github.com/kkearne/trap_mux/txPlugins/interfaces"
 	g "github.com/gosnmp/gosnmp"
 )
 
@@ -51,9 +51,9 @@ type filterObj struct {
 
 // Get in a set of action arg pairs, convert to a map to pass into plugins
 
-// trapexFilter holds the filter data and action for a specfic
+// trapmuxFilter holds the filter data and action for a specfic
 // filter line from the config file.
-type trapexFilter struct {
+type trapmuxFilter struct {
 	// SnmpVersions - an empty array will indicate ALL versions
 	SnmpVersions []string `default:"[]" yaml:"snmp_versions"`
 	SourceIp     string   `default:"" yaml:"source_ip"`
@@ -77,11 +77,11 @@ type trapexFilter struct {
 	plugin     pluginLoader.ActionPlugin
 }
 
-// UnmarshalYAML is what enables the setter to work for the trapexFilter
-func (s *trapexFilter) UnmarshalYAML(unmarshal func(interface{}) error) error {
+// UnmarshalYAML is what enables the setter to work for the trapmuxFilter
+func (s *trapmuxFilter) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	defaults.Set(s)
 
-	type plain trapexFilter
+	type plain trapmuxFilter
 	if err := unmarshal((*plain)(s)); err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ type MetricConfig struct {
 	plugin     pluginLoader.MetricPlugin
 }
 
-type trapexConfig struct {
+type trapmuxConfig struct {
 	teConfigured bool
 
 	General struct {
@@ -116,8 +116,8 @@ type trapexConfig struct {
 	IpSets_str []map[string][]string `default:"{}" yaml:"ip_sets"`
 	IpSets     map[string]IpSet      `default:"{}"`
 
-	Filters []trapexFilter `default:"[]" yaml:"filters"`
+	Filters []trapmuxFilter `default:"[]" yaml:"filters"`
 
 	// Bad things happen to good plugins. How do you want to handle exceptions?
-	PluginErrorActions []trapexFilter `default:"[]" yaml:"plugin_error_actions"`
+	PluginErrorActions []trapmuxFilter `default:"[]" yaml:"plugin_error_actions"`
 }

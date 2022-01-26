@@ -5,6 +5,6 @@
 //
 package main
 
-// Global const for this version of trapex
+// Global const for this version of trapmux
 //
 const myVersion string = "0.10.0"

@@ -16,10 +16,10 @@ func init() {
 }
 
 func TestTrapReceiverSection(t *testing.T) {
-	var testConfig trapexConfig
+	var testConfig trapmuxConfig
 	loadConfig("tests/config/general.yml", &testConfig)
 
-	if testConfig.TrapReceiverSettings.Hostname != "trapex_test1" {
+	if testConfig.TrapReceiverSettings.Hostname != "trapmux_test1" {
 		t.Errorf("Hostname is not set correctly: %s", testConfig.TrapReceiverSettings.Hostname)
 	}
 	if testConfig.TrapReceiverSettings.ListenAddr != "127.0.0.1" {
@@ -35,7 +35,7 @@ func TestTrapReceiverSection(t *testing.T) {
 }
 
 func TestIgnoreVersions(t *testing.T) {
-	var testConfig trapexConfig
+	var testConfig trapmuxConfig
 	var err error
 
 	loadConfig("tests/config/ignore_versions_bad.yml", &testConfig)
@@ -58,7 +58,7 @@ func TestIgnoreVersions(t *testing.T) {
 }
 
 func TestLogging(t *testing.T) {
-	var testConfig trapexConfig
+	var testConfig trapmuxConfig
 	var err error
 	if err = loadConfig("tests/config/logging.yml", &testConfig); err != nil {
 		t.Errorf("Logging configuration broken: %s", err)
@@ -79,7 +79,7 @@ func TestLogging(t *testing.T) {
 }
 
 func TestSnmpv3(t *testing.T) {
-	var testConfig trapexConfig
+	var testConfig trapmuxConfig
 	loadConfig("tests/config/snmpv3.yml", &testConfig)
 
 	if testConfig.TrapReceiverSettings.MsgFlags_str != "AuthPriv" {
@@ -103,7 +103,7 @@ func TestSnmpv3(t *testing.T) {
 }
 
 func TestIpSetsGood(t *testing.T) {
-	var testConfig trapexConfig
+	var testConfig trapmuxConfig
 	loadConfig("tests/config/ipsets.yml", &testConfig)
 
 	var numsets = len(testConfig.IpSets_str)
@@ -118,7 +118,7 @@ func TestIpSetsGood(t *testing.T) {
 }
 
 func TestIpSetsBadIps(t *testing.T) {
-	var testConfig trapexConfig
+	var testConfig trapmuxConfig
 	loadConfig("tests/config/ipsets_bad_ips.yml", &testConfig)
 
 	var err error
@@ -128,7 +128,7 @@ func TestIpSetsBadIps(t *testing.T) {
 }
 
 func TestFiltersGood(t *testing.T) {
-	var testConfig trapexConfig
+	var testConfig trapmuxConfig
 	loadConfig("tests/config/filters.yml", &testConfig)
 
 	var numfilters = len(testConfig.Filters)
@@ -143,7 +143,7 @@ func TestFiltersGood(t *testing.T) {
 }
 
 func TestFiltersMissingLogDir(t *testing.T) {
-	var testConfig trapexConfig
+	var testConfig trapmuxConfig
 	loadConfig("tests/config/filters_bad_logfile.yml", &testConfig)
 
 	var err error
@@ -154,7 +154,7 @@ func TestFiltersMissingLogDir(t *testing.T) {
 
 /* --- missing IP set checks are commented out in code
 func TestFiltersMissingIpSet(t *testing.T) {
-    var testConfig trapexConfig
+    var testConfig trapmuxConfig
     loadConfig( "tests/config/filters_missing_wipset.yml" , &testConfig)
 
     var err error
