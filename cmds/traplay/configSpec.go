@@ -6,7 +6,7 @@
 package main
 
 import (
-	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
+	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
 )
 
 type ReplayArgType struct {

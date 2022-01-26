@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
-	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
+	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
 
 	"github.com/creasty/defaults"
 	"gopkg.in/yaml.v2"
@@ -58,7 +58,7 @@ var myVersion string = "1.0"
 
 func processCommandLine() {
 	flag.Usage = showUsage
-	c := flag.String("c", "/opt/trapex/etc/replay.yml", "")
+	c := flag.String("c", "/opt/trapmux/etc/replay.yml", "")
 	showVersion := flag.Bool("v", false, "")
 
 	flag.Parse()

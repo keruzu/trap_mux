@@ -13,8 +13,8 @@ import (
 	"os"
 	"path/filepath"
 
-	pluginMeta "github.com/damienstuart/trapex/txPlugins"
-	pluginLoader "github.com/damienstuart/trapex/txPlugins/interfaces"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
+	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
 
 	"github.com/rs/zerolog"
 )
