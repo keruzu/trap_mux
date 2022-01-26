@@ -18,8 +18,8 @@ Resources:
   CodeBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Sub trapex_${StreamId}
-      Description: Builds trapex binaries
+      Name: !Sub trapmux_${StreamId}
+      Description: Builds trapmux binaries
       ServiceRole: !GetAtt CodeBuildRole.Arn
       Artifacts:
         # Initial testing to see if build will work
@@ -34,7 +34,7 @@ Resources:
         Image: !Ref CodeBuildImage
       Source:
         Type: GITHUB
-        Location: https://github.com/damienstuart/trapex.git
+        Location: https://github.com/keruzu/trapmux.git
         BuildSpec: !Ref BuildSpec
       Visibility: PUBLIC_READ
       BuildBatchConfig:

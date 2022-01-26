@@ -4,8 +4,8 @@ version: 0.2
 
 env:
   variables:
-    docker_tag: damientstuart/trapex
-    ecr_repo: trapex
+    docker_tag: keruzu/trapmux
+    ecr_repo: trapmux
 
 # ===  Build stages  ======================================
 phases:

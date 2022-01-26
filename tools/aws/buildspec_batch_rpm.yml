@@ -46,6 +46,6 @@ phases:
 # ===  Artifacts  ======================================
 artifacts:
   files:
-    - ~/rpmbuild/RPMS/**/trapex*.rpm
+    - ~/rpmbuild/RPMS/**/trapmux*.rpm
   discard-paths: yes
 

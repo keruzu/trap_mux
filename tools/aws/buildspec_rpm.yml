@@ -45,7 +45,7 @@ phases:
     commands:
       - rpmbuild -ba tools/rpm.spec
       - go test -json > unit_test_results.json
-      - yum -y localinstall ~/rpmbuild/RPMS/x86_64/trapex*rpm
+      - yum -y localinstall ~/rpmbuild/RPMS/x86_64/trapmux*rpm
 
 
 # ===  Test Reports  ======================================
@@ -58,9 +58,9 @@ reports:
 # ===  Artifacts  ======================================
 artifacts:
   files:
-    - ~/rpmbuild/RPMS/**/trapex*.rpm
-    - trapex
-    - trapex.exe
-  name: trapex_${GOOS}_${GOARCH}.zip
+    - ~/rpmbuild/RPMS/**/trapmux*.rpm
+    - trapmux
+    - trapmux.exe
+  name: trapmux_${GOOS}_${GOARCH}.zip
   discard-paths: yes
 

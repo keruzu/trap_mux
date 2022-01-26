@@ -46,8 +46,8 @@ phases:
 # ===  Artifacts  ======================================
 artifacts:
   files:
-    - trapex
-    - trapex.exe
-  name: trapex_${GOOS}_${GOARCH}.zip
+    - trapmux
+    - trapmux.exe
+  name: trapmux_${GOOS}_${GOARCH}.zip
   discard-paths: yes
 

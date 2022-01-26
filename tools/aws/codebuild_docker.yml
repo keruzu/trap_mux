@@ -14,8 +14,8 @@ Resources:
   CodeBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: trapex_docker
-      Description: Builds trapex Docker image
+      Name: trapmux_docker
+      Description: Builds trapmux Docker image
       ServiceRole: !GetAtt CodeBuildRole.Arn
       Artifacts:
         Type: NO_ARTIFACTS
@@ -30,7 +30,7 @@ Resources:
               Value: !Sub ${AWS::AccountId}
       Source:
         Type: GITHUB
-        Location: https://github.com/damienstuart/trapex.git
+        Location: https://github.com/keruzu/trapmux.git
         BuildSpec: !Ref BuildSpec
       Visibility: PUBLIC_READ
 
@@ -75,7 +75,7 @@ Resources:
   ECRRepository:
     Type: AWS::ECR::Repository
     Properties:
-      RepositoryName: trapex
+      RepositoryName: trapmux
       ImageScanningConfiguration: 
         ScanOnPush: true
 
