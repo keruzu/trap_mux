@@ -29,3 +29,9 @@ tests/tmp/*.log
 
 # Misc dev env files
 .vscode
+
+# Other artifacts
+*.pdf
+# Man pages
+*.8
+
