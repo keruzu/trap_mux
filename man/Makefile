@@ -1,12 +1,12 @@
-# Makefile for trapex
+# Makefile for trapmux
 #
 
 # If go is not in your path, you can put the full pathname here
 A2X = $(shell which a2x)
 
-MAN_SRC = trapex.man.asciidoc
-MANPAGE = trapex.8
-MANPDF = trapex.man.pdf
+MAN_SRC = trapmux.man.asciidoc
+MANPAGE = trapmux.8
+MANPDF = trapmux.man.pdf
 
 all: pdf
 
