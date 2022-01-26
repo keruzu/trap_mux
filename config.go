@@ -138,7 +138,11 @@ func applyCliOverrides(newConfig *trapexConfig) {
 	if teCmdLine.debugMode {
 		newConfig.Logging.Level = "debug"
 	}
-	if newConfig.TrapReceiverSettings.Hostname == "" {
+
+	hostname := os.Getenv("TRAPMUX_HOSTNAME")
+        if hostname != "" {
+			newConfig.TrapReceiverSettings.Hostname = hostname
+} else if newConfig.TrapReceiverSettings.Hostname == "" {
 		myName, err := os.Hostname()
 		if err != nil {
 			newConfig.TrapReceiverSettings.Hostname = "_undefined"
