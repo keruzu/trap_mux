@@ -129,10 +129,17 @@ func applyCliOverrides(newConfig *trapmuxConfig) {
 	// Override the listen address:port if they were specified on the
 	// command line.  If not and the listener values were not set in
 	// the config file, fallback to defaults.
-	if teCmdLine.bindAddr != "" {
+	listenAddr := os.Getenv("TRAPMUX_LISTEN_ADDRESS")
+	if listenAddr != "" {
+		newConfig.TrapReceiverSettings.ListenAddr = listenAddr
+	} else if teCmdLine.bindAddr != "" {
 		newConfig.TrapReceiverSettings.ListenAddr = teCmdLine.bindAddr
 	}
-	if teCmdLine.listenPort != "" {
+
+	listenPort := os.Getenv("TRAPMUX_LISTEN_PORT")
+	if listenPort != "" {
+		newConfig.TrapReceiverSettings.ListenPort = listenPort
+	} else if teCmdLine.listenPort != "" {
 		newConfig.TrapReceiverSettings.ListenPort = teCmdLine.listenPort
 	}
 	if teCmdLine.debugMode {
