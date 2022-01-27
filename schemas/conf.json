@@ -1,0 +1,20 @@
+{"listener": {
+  "hostname": "trapex_test1",
+
+  "listen_address":  "0.0.0.0",
+  "listen_port":     162
+},
+"filters": [
+  { "action": "logfile",
+    "plugin_args": {
+      "filename": "/Users/kellskearney/go/src/trapex/dummy.log"
+}
+},
+  { "action": "capture",
+    "plugin_args": {
+      "dir": "/Users/kellskearney/go/src/trapex/captured",
+      "file_expr": "test"
+}
+}
+]
+}
