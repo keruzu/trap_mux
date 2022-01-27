@@ -103,6 +103,14 @@ func loadConfig(config_file string, newConfig *trapmuxConfig) error {
 
 	if strings.HasPrefix(config_file, "http") {
 		var response *http.Response
+                /*
+                 *  gosec complains about the following:
+                 * G107 (CWE-88): Potential HTTP request made with variable url (Confidence: MEDIUM, Severity: MEDIUM)
+                 * The issue is that we really do want the user-specified URL to control things,
+                 * but there doesn't seem to be a good sandbox for doing something sane.
+                 *
+                 * FIXME: Use a regex to validate the URL?
+                 */ 
 		response, err = http.Get(config_file)
 		if err != nil {
 			return err

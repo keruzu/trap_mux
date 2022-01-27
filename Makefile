@@ -38,7 +38,7 @@ rpm: build
 	rpmbuild -ba tools/rpm.spec
 
 gosec:
-	gosec ./...
+	gosec -exclude=G107 ./...
 
 clean: clean_plugins
 	rm -rf ~/rpmbuild/BUILD/${TARGET} ~/rpmbuild/BUILD/${BUILDARCH}/*
