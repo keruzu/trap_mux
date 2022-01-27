@@ -82,11 +82,15 @@ func replayTrap(filename string) {
 
 func loadCaptureGob(filename string) (pluginMeta.Trap, error) {
 	var trap pluginMeta.Trap
-	fd, err := os.Open(filename)
+	fd, err := os.Open(filepath.Clean(filename))
 	if err != nil {
 		return trap, err
 	}
-	defer fd.Close()
+defer func() {
+    if err := fd.Close(); err != nil { 
+		replayLog.Error().Err(err).Str("capture_file", filename).Msg("Unable to load capture file")
+    }
+}()
 
 	decoder := gob.NewDecoder(fd)
 	err = decoder.Decode(&trap)

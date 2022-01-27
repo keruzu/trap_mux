@@ -17,6 +17,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"path/filepath"
 
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
@@ -111,7 +112,7 @@ func (p *replayData) preLoadTraps(dir string, maxFiles int, suffix string) error
 		filename := fd.Name()
 		if strings.HasSuffix(filename, suffix) {
 			fullpath := dir + "/" + filename
-			trap, err := loadCaptureGob(fullpath)
+			trap, err := loadCaptureGob(p.replayLog, fullpath)
 			if err != nil {
 				return err
 			}
@@ -125,13 +126,18 @@ func (p *replayData) preLoadTraps(dir string, maxFiles int, suffix string) error
 	return nil
 }
 
-func loadCaptureGob(filename string) (pluginMeta.Trap, error) {
+func loadCaptureGob(pluginLog *zerolog.Logger, filename string) (pluginMeta.Trap, error) {
 	var trap pluginMeta.Trap
-	fd, err := os.Open(filename)
+	fd, err := os.Open(filepath.Clean(filename))
 	if err != nil {
 		return trap, err
 	}
-	defer fd.Close()
+
+defer func() {
+    if err := fd.Close(); err != nil {
+                pluginLog.Error().Err(err).Str("capture_file", filename).Msg("Unable to load capture file")
+    }
+}()
 
 	decoder := gob.NewDecoder(fd)
 	err = decoder.Decode(&trap)

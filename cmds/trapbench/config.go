@@ -95,7 +95,7 @@ func loadConfig(config_file string, newConfig *replayConfig) error {
 	}
 
 	filename, _ := filepath.Abs(config_file)
-	yamlFile, err := ioutil.ReadFile(filename)
+	yamlFile, err := ioutil.ReadFile(filepath.Clean(filename))
 	if err != nil {
 		return err
 	}

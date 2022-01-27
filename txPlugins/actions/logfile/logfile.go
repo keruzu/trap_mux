@@ -101,7 +101,7 @@ func (a *trapLogger) Configure(pluginLog *zerolog.Logger, actionArgs map[string]
 	if !ok {
 		return fmt.Errorf("Missing the required 'filename' argument to the logfile action")
 	}
-	fd, err := os.OpenFile(a.logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	fd, err := os.OpenFile(a.logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
 		return err
 	}

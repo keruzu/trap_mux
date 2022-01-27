@@ -63,7 +63,8 @@ func (a *ClickhouseExport) Configure(pluginLog *zerolog.Logger, actionArgs map[s
 	a.main_log = pluginLog
 
 	a.logFile = actionArgs["filename"]
-	fd, err := os.OpenFile(a.logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+        // gosec complains if perms are less than 600
+	fd, err := os.OpenFile(a.logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
 		return err
 	}

@@ -13,6 +13,7 @@ import (
 	"encoding/gob"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
@@ -77,7 +78,7 @@ func (a *trapCapture) ProcessTrap(trap *pluginMeta.Trap) error {
 	if err == nil {
 		switch a.fileFormat {
 		case "gob", "":
-			err = saveCaptureGob(filename, trap)
+			err = saveCaptureGob(a.main_log, filename, trap)
 		default:
 			return fmt.Errorf("Unknown file format '%s'", a.fileFormat)
 		}
@@ -94,12 +95,18 @@ func makeCaptureFilename(dir string, fileExpr string, format string, counter int
 	return filename, nil
 }
 
-func saveCaptureGob(filename string, trap *pluginMeta.Trap) error {
-	fd, err := os.Create(filename)
+func saveCaptureGob(pluginLog *zerolog.Logger, filename string, trap *pluginMeta.Trap) error {
+	fd, err := os.Create(filepath.Clean(filename))
 	if err != nil {
 		return err
 	}
-	defer fd.Close()
+
+defer func() {
+    if err := fd.Close(); err != nil {
+                pluginLog.Error().Err(err).Str("capture_file", filename).Msg("Unable to load capture file")
+    }
+}()
+
 
 	encoder := gob.NewEncoder(fd)
 	return encoder.Encode(trap)

@@ -22,7 +22,7 @@ func loadTestConfig(config_file string, newConfig *testDataSpec) error {
         }
 
 	filename, _ := filepath.Abs(config_file)
-	yamlFile, err := ioutil.ReadFile(filename)
+	yamlFile, err := ioutil.ReadFile(filepath.Clean(filename))
 	if err != nil {
 		return err
 	}

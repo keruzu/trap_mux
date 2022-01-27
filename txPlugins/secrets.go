@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"path/filepath"
 )
 
 func GetSecret(cipherPhrase string) (string, error) {
@@ -36,7 +37,7 @@ func GetSecret(cipherPhrase string) (string, error) {
 }
 
 func fetchFromFile(filename string) (string, error) {
-	data, err := ioutil.ReadFile(filename)
+	data, err := ioutil.ReadFile(filepath.Clean(filename))
 	if err != nil {
 		return "", fmt.Errorf("Unable to read secret from file %s: %s", filename, err)
 	}
