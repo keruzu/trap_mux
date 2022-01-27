@@ -126,8 +126,7 @@ func (a trapLogger) SigUsr2() error {
 }
 
 func (a trapLogger) Close() error {
-	a.fd.Close()
-	return nil
+	return a.fd.Close()
 }
 
 // makeTrapLogEntry creates a log entry string for the given trap data.

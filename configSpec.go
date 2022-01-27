@@ -79,7 +79,10 @@ type trapmuxFilter struct {
 
 // UnmarshalYAML is what enables the setter to work for the trapmuxFilter
 func (s *trapmuxFilter) UnmarshalYAML(unmarshal func(interface{}) error) error {
-	defaults.Set(s)
+        configerr := defaults.Set(s)
+        if configerr != nil {
+                return configerr
+        }
 
 	type plain trapmuxFilter
 	if err := unmarshal((*plain)(s)); err != nil {

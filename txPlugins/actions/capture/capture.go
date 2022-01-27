@@ -102,8 +102,7 @@ func saveCaptureGob(filename string, trap *pluginMeta.Trap) error {
 	defer fd.Close()
 
 	encoder := gob.NewEncoder(fd)
-	encoder.Encode(trap)
-	return nil
+	return encoder.Encode(trap)
 }
 
 func (p trapCapture) SigUsr1() error {

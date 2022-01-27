@@ -16,7 +16,10 @@ import (
 // loadTestConfig
 // Load a YAML file with configuration, and create a new object
 func loadTestConfig(config_file string, newConfig *testDataSpec) error {
-	defaults.Set(newConfig)
+        configerr := defaults.Set(newConfig)
+        if configerr != nil {
+                return configerr
+        }
 
 	filename, _ := filepath.Abs(config_file)
 	yamlFile, err := ioutil.ReadFile(filename)

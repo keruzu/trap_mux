@@ -513,8 +513,11 @@ func addOidFilterObj(filter *trapmuxFilter, oid string, lineNumber int) error {
 func closeTrapexHandles() {
 	for _, f := range teConfig.Filters {
 		if f.actionType == actionPlugin {
-			f.plugin.Close()
+			err := f.plugin.Close()
+if err != nil {
+			trapmuxLog.Warn().Err(err).Str("plugin_name", f.ActionName).Msg("Unable to perform close operation")
 		}
+}
 	}
 }
 

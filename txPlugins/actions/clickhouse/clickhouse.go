@@ -89,17 +89,12 @@ func (a ClickhouseExport) SigUsr1() error {
 }
 
 func (a ClickhouseExport) Close() error {
-	fmt.Println("Close")
-	a.fd.Close()
-	return nil
+	return a.fd.Close()
 }
 
 func (a ClickhouseExport) SigUsr2() error {
-	fmt.Println("SigUsr2")
-	a.logger.Rotate()
-
-	a.main_log.Info().Str("logfile", a.logFile).Msg("Rotated Clickhouse CSV file")
-	return nil
+	a.main_log.Info().Str("logfile", a.logFile).Msg("Rotating Clickhouse CSV file")
+	return a.logger.Rotate()
 }
 
 // logCsvTrap takes care of logging the given trap to the given ClickhouseExport

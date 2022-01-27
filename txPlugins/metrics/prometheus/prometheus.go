@@ -43,7 +43,7 @@ func (p *prometheusStats) Configure(pluginLog *zerolog.Logger, args map[string]s
 	exporter := fmt.Sprintf("http://%s/%s", p.listenAddress, p.endpoint)
 	p.main_log.Info().Str("endpoint", exporter).Msg("Prometheus metrics exporter")
 
-	go exposeMetrics(p.endpoint, p.listenAddress)
+	go exposeMetrics(p.main_log, p.endpoint, p.listenAddress)
 
 	return nil
 }
@@ -60,10 +60,13 @@ func (p prometheusStats) Report() (string, error) {
 
 // exposeMetrics
 // Allow Prometheus to gather current performance metrics via /metrics URL
-func exposeMetrics(endpoint string, listenAddress string) {
+func exposeMetrics(pluginLog *zerolog.Logger, endpoint string, listenAddress string) {
 	server := http.NewServeMux()
 	server.Handle(endpoint, promhttp.Handler())
-	http.ListenAndServe(listenAddress, server)
+	err := http.ListenAndServe(listenAddress, server)
+        if err != nil {
+            pluginLog.Error().Str("endpoint", endpoint).Str("listen_address", listenAddress).Msg("Prometheus metrics exporter unable to start HTTP service")
+        }
 }
 
 var MetricPlugin prometheusStats

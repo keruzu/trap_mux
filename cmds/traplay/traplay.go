@@ -70,12 +70,13 @@ func main() {
 func replayTrap(filename string) {
 	trap, err := loadCaptureGob(filename)
 	if err != nil {
-		replayLog.Fatal().Err(err).Str("format", "gob").Str("filename", filename).Msg("Unable to load capture file")
+		replayLog.Fatal().Err(err).Str("format", "gob").Str("capture_file", filename).Msg("Unable to load capture file")
 		os.Exit(1)
 	}
 
 	for _, destination := range teConfig.Destinations {
-		destination.plugin.(pluginLoader.ActionPlugin).ProcessTrap(&trap)
+		err = destination.plugin.(pluginLoader.ActionPlugin).ProcessTrap(&trap)
+		replayLog.Warn().Err(err).Str("capture_file", filename).Msg("Unable to replay file")
 	}
 }
 

@@ -35,7 +35,10 @@ func handleSIGUSR2(sigCh chan os.Signal) {
 			trapmuxLog.Info().Msg("Got SIGUSR2")
 			for _, f := range teConfig.Filters {
 				if f.actionType == actionPlugin {
-					f.plugin.(pluginLoader.ActionPlugin).SigUsr2()
+				err :=	f.plugin.(pluginLoader.ActionPlugin).SigUsr2()
+if err != nil {
+				trapmuxLog.Warn().Err(err).Msg("Issue handling action")
+}
 				}
 			}
 		}
