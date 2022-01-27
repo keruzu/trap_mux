@@ -1,80 +1,25 @@
-:man source: Trapex
-:man manual: Trapex
+:man source: Trapmuxyml
+:man manual: Trapmuxyml
 
-TRAPEX(8)
-=========
+TRAPMUX.YML(8)
+==============
 
 NAME
 ----
-trapex - An SNMP trap forwarder with filtering and translation capability
-
-
-SYNOPSIS
---------
-*trapex* [*-h*] [*-c* <config_file>] [*-b* <bind_ip>] [*-p* <listen_port>]
-         [*-d*] [*-v*]
+trapmux.yml - format of configuration file for trapmux
 
 
 DESCRIPTION
 -----------
-The *trapex* program an SNMP Trap proxy/forwarder. It can receive, filter,
-manipulate, log, and forward SNMP traps to zero or mulitple destinations.
-It can receive and process SNMPv1, SNMPv2c, or SNMPv3 traps.
-
-*Trapex* is modeled after, and closely resembles a commercial product called
-'eHealth Trap Exploder'.  The legacy 'trapexploder' program does not support
-SNMP v3 traps, and may no longer be suppored. *Trapex* was written to provide
-a suitable replacement for 'trapexploder'.
-
-Presently, all v2c and v3 traps are converted to v1 before they are logged
-and/or forwarded. Support for sending other versions may be added in a future
-release.
-
-
-ARGUMENTS
----------
-The command-line arguments supported by *trapex* are optional if the *trapex*
-configuration file is in it default location ('/etc/trapex.conf'), and the
-remaining configuration options are set there.  Note that any options set
-via the command-line will override their corresponding values in the
-configuration file.
-
-The options are as follows:
-
-*-h*::
-    Print a usage summary message and exit.
-
-*-c* '</path/to/trapex.conf>'::
-    Specify/override the location of the trapex configuration file. If not
-    set, the default is */etc/trapex.conf"
-
-*-b* '<bind_ip>'::
-    By default, *trapex* will listen on all active interfaces for incoming
-    traps. This option allow for specifying a specific IP on witch to listen.
-
-*-p* '<port>'::
-    Specify the UDP port on which to listen for incoming traps. The default is
-    port 162.
-
-*-d*::
-    Enable 'debug' mode. This causes *trapex* to print very verbose information
-    on the incoming traps as well as the trap log entries to STDOUT.
-
-*-v*::
-    Print the *trapex* version and exit.
-
-
-TRAPEX CONFIGURATION FILE
--------------------------
-The *trapex* configuration file ('trapex.conf') is used to set the various
+The *trapmux* configuration file ('trapmux.yml') is used to set the various
 runtime options as well as the filtering, forwarding, and logging directives.
 
 Blank lines are allowed, and those that start with '"#"' are for comments.
 
-There are 3 types of directives in the 'trapex.conf' file:
+There are three types of directives in the 'trapmux.yml' file:
 
 Configuration directives -:: 
-    These are lines in the file that have *trapex* configuration options and
+    These are lines in the file that have *trapmux* configuration options and
     their values. In most cases these line will have a parameter/option name
     and its corresponding value. Some directives (like 'debug') do not have 
     a value and are a boolean that is true when that entry is uncommented.
@@ -98,11 +43,11 @@ CONFIGURATION DIRECTIVES
 *_General Options:_*
 
 *debug*::
-    Enable 'debug' mode. This causes *trapex* to print very verbose information
+    Enable 'debug' mode. This causes *trapmux* to print very verbose information
     on the incoming traps as well as the trap log entries to STDOUT.
 
-*trapexHost* '<hostname>'::
-   Set/overide the hostname for this trapex instance. If not specified, *trapex*
+*trapmuxHost* '<hostname>'::
+   Set/overide the hostname for this trapmux instance. If not specified, *trapmux*
    will attempt to determine the local hostname and use that. Currently, this
    data is only used for the CSV log data.
 
@@ -118,12 +63,12 @@ CONFIGURATION DIRECTIVES
 
 *ignoreVersions* '<SNMP Version>[,<SNMP Version>]'::
     Specify one or more SNMP versions to ignore. Any traps that have a version
-    that matches any listed here will be ignored and dropped by trapex. Valid
+    that matches any listed here will be ignored and dropped by trapmux. Valid
     versions are: 'v1', 'v2c', and 'v3' (or just '1', '2', '3' would suffice as
     well).  Multiple entries are separated by a comma (no spaces). +
      +
     *Note:*
-    Specifying all 3 versions will cause trapex to complain and exit at startup
+    Specifying all 3 versions will cause trapmux to complain and exit at startup
     because no traps would be processed at all in that case.
 
 *_Log File Handling:_*
@@ -146,11 +91,11 @@ CSV-based logs.
 
 *_SNMP v3 Setting_*
 
-These are options for receiving SNMP v3 traps. Note that *trapex* currently
+These are options for receiving SNMP v3 traps. Note that *trapmux* currently
 only supports the SNMP v3 'User-based Security Model' (USM).
 
 *v3msgFlags* '<AuthPriv|AuthNoPriv|NoAuthNoPriv>'::
-    This specifies the 'SNMP v3 Message Flags'. Currently, *Trapex* supports
+    This specifies the 'SNMP v3 Message Flags'. Currently, *Trapmux* supports
     only the 'Auth' (Authentication) and 'Priv' (Privacy) flags. These are 
     set via a single string as follows:
 	* *AuthPriv* - Authentication and privacy
@@ -207,7 +152,7 @@ both the 'Source IP' or 'Agent Address' fields.
 FILTER DIRECTIVES
 -----------------
 
-The *trapex* configuration 'filter' directives are used for specifying which
+The *trapmux* configuration 'filter' directives are used for specifying which
 traps are processed and what action is taken for traps that match the filter.
 
 Each 'filter' line starts with the word "'filter'" followed by the 'filter
@@ -251,13 +196,13 @@ to match (logical AND) in order for the trap to match and trigger the action.
 
 *_Filter Actions_*
 
-The 'actions' that are currenly supported by *trapex* are:
+The 'actions' that are currenly supported by *trapmux* are:
 
 *forward* <ip_address:port> [break]::
     Forward the trap to the specified IP address and port. *WARNING:* Do
-    not specify the trapex host and port as a destination or you will
+    not specify the trapmux host and port as a destination or you will
     create a trap forwarding loop! Note that this action also supports
-    an optional second argument: 'break'. This tells trapex to stop
+    an optional second argument: 'break'. This tells trapmux to stop
     processing this trap after the forward operation.
 
 *nat* <ip_address|$SRC_IP>::
@@ -268,7 +213,7 @@ The 'actions' that are currenly supported by *trapex* are:
     Save the trap data to the specified log file. Any files created by log
     actions are subject to the log file handling configuration directives.
     Note that this action also supports an optional second argument: 'break'.
-    This tells trapex to stop processing this trap after the log operation.
+    This tells trapmux to stop processing this trap after the log operation.
 
 *csv* </path/to/csv/file> [break]::
     Save the trap data to the specified file in a CSV format that is meant
@@ -292,27 +237,4 @@ filter, and that trap is checked against the next filter, and so on (unless
 the action is 'break' - where the trap is dropped and ignored from that point
 on).
 
-
-AUTHORS
--------
-*Trapex* was written by Damien Stuart <damien.stuart@sungardas.com>.
-
-ACKNOWLEDGEMENTS
-----------------
-*Trapex* is written in Go and uses open-source 'Go packages' for some of its
-core functionality. Special thanks goes to the the following for their work
-on these packages:
-
-- Sonia Hamilton <sonia@snowfrog.net> for the 'gosnmp' package which provides
-the SNMP packet receiving, parsing, and trap sending functionality.
-- Nate Finch <nate.finch@gmail.com> for the 'lumberjack' go package which is
-used for the log file handling.
-
-
-BUGS
-----
-Bound to be some...
-
-Send questions or bug reports to damien.stuart@sungardas.com Suggestions
-and/or comments are always welcome as well.
 

@@ -1,0 +1,88 @@
+:man source: Trapmux
+:man manual: Trapmux
+
+TRAPMUX(8)
+=========
+
+NAME
+----
+trapmux - An SNMP trap multiplexer to forward traps, filtering and translation capability
+
+
+SYNOPSIS
+--------
+*trapmux* [*-h*] [*-c* <config_file>] [*-b* <bind_ip>] [*-p* <listen_port>]
+         [*-d*] [*-v*]
+
+
+DESCRIPTION
+-----------
+The *trapmux* program an SNMP Trap proxy/forwarder. It can receive, filter,
+manipulate, log, and forward SNMP traps to zero or mulitple destinations.
+It can receive and process SNMPv1, SNMPv2c, or SNMPv3 traps.
+
+*Trapmux* is modeled after, and closely resembles a commercial product called
+'eHealth Trap Exploder'.  The legacy 'trapmuxploder' program does not support
+SNMP v3 traps, and may no longer be suppored. *Trapmux* was written to provide
+a suitable replacement for 'trapmuxploder'.
+
+Presently, all v2c and v3 traps are converted to v1 before they are logged
+and/or forwarded. Support for sending other versions may be added in a future
+release.
+
+
+ARGUMENTS
+---------
+The command-line arguments supported by *trapmux* are optional if the *trapmux*
+configuration file is in it default location ('/etc/trapmux.conf'), and the
+remaining configuration options are set there.  Note that any options set
+via the command-line will override their corresponding values in the
+configuration file.
+
+The options are as follows:
+
+*-h*::
+    Print a usage summary message and exit.
+
+*-c* '</path/to/trapmux.conf>'::
+    Specify/override the location of the trapmux configuration file. If not
+    set, the default is */etc/trapmux.conf"
+
+*-b* '<bind_ip>'::
+    By default, *trapmux* will listen on all active interfaces for incoming
+    traps. This option allow for specifying a specific IP on witch to listen.
+
+*-p* '<port>'::
+    Specify the UDP port on which to listen for incoming traps. The default is
+    port 162.
+
+*-d*::
+    Enable 'debug' mode. This causes *trapmux* to print very verbose information
+    on the incoming traps as well as the trap log entries to STDOUT.
+
+*-v*::
+    Print the *trapmux* version and exit.
+
+AUTHORS
+-------
+*Trapmux* was originally written by Damien Stuart <damien.stuart@sungardas.com>,
+and then refactored and enhanced by Kells Kearney.
+
+ACKNOWLEDGEMENTS
+----------------
+*Trapmux* is written in Go and uses open-source 'Go packages' for some of its
+core functionality. Special thanks goes to the the following for their work
+on these packages:
+
+- Sonia Hamilton <sonia@snowfrog.net> for the 'gosnmp' package which provides
+the SNMP packet receiving, parsing, and trap sending functionality.
+- Nate Finch <nate.finch@gmail.com> for the 'lumberjack' go package which is
+used for the log file handling.
+
+
+BUGS
+----
+Bound to be some...
+
+Suggestions and/or comments are always welcome
+

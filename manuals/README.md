@@ -23,3 +23,7 @@ option to the `a2x` command:
 
     a2x -f xhtml trapmux.man.asciidoc
 
+## Requires
+To install `asciidoc`, perform:
+
+    yum install -y asciidoc
