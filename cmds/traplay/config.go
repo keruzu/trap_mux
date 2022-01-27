@@ -91,7 +91,10 @@ func isFile(path string) bool {
 // loadConfig
 // Load a YAML file with configuration, and create a new object
 func loadConfig(config_file string, newConfig *replayConfig) error {
-	defaults.Set(newConfig)
+        configerr := defaults.Set(newConfig)
+        if configerr != nil {
+                return configerr
+        }
 
 	filename, _ := filepath.Abs(config_file)
 	yamlFile, err := ioutil.ReadFile(filename)

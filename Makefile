@@ -37,6 +37,9 @@ fmt:
 rpm: build
 	rpmbuild -ba tools/rpm.spec
 
+gosec:
+	gosec ./...
+
 clean: clean_plugins
 	rm -rf ~/rpmbuild/BUILD/${TARGET} ~/rpmbuild/BUILD/${BUILDARCH}/*
 	go clean
