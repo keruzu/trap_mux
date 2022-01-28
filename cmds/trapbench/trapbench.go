@@ -9,6 +9,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"time"
 	"path/filepath"
 
 	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
@@ -44,13 +45,11 @@ func main() {
 	}
 
 	replayLog.Info().Int("replayed_traps", count).Msg("Replayed traps")
-	/*
 	   	startTime := time.Now()
 	   	endTime := time.Now()
-	           duration := endTime - startTime
-	   		replayLog.Info().Int("replay_duration", duration).Msg("Replayed trap in %v seconds")
+	           duration := endTime.Sub(startTime)
+	   		replayLog.Info().Str("replay_duration", duration.String()).Msg("Replayed trap in %v seconds")
 
-	*/
 }
 
 func genAndActionTrap() {
