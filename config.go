@@ -403,6 +403,7 @@ func setAction(filter *trapmuxFilter, pluginPathExpr string, lineNumber int) err
 		if err != nil {
 			return fmt.Errorf("unable to load plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
+                pluginMeta.MergeSecrets(filter.ActionArgs, &trapmuxLog)
 		if err = filter.plugin.Configure(&trapmuxLog, filter.ActionArgs); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
@@ -410,24 +411,6 @@ func setAction(filter *trapmuxFilter, pluginPathExpr string, lineNumber int) err
 	return nil
 }
 
-/*
-func args2map(data []ActionArgType) map[string]string {
-	pluginDataMapping := make(map[string]string)
-	for _, pair := range data {
-		if strings.Contains(pair.Key, "secret") ||
-			strings.Contains(pair.Key, "password") {
-			plaintext, err := pluginMeta.GetSecret(pair.Value)
-			if err != nil {
-				trapmuxLog.Warn().Err(err).Str("secret", pair.Key).Str("cipher_text", pair.Value).Msg("Unable to decode secret")
-			} else {
-				pair.Value = plaintext
-			}
-		}
-		pluginDataMapping[pair.Key] = pair.Value
-	}
-	return pluginDataMapping
-}
-*/
 
 // addSnmpFilterObj adds a filter if necessary
 // An empty arry of filters is interpreted to mean "All versions should match"
@@ -539,6 +522,7 @@ func addReportingPlugins(newConfig *trapmuxConfig) error {
 			trapmuxLog.Fatal().Err(err).Str("plugin_name", config.PluginName).Msg("Unable to load metric reporting plugin")
 			return err
 		}
+pluginMeta.MergeSecrets(config.Args, &trapmuxLog)
 		if err = config.plugin.Configure(&trapmuxLog, config.Args, counters); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", config.PluginName, i, err)
 		}

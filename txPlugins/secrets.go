@@ -9,8 +9,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 	"path/filepath"
+	"strings"
+
+"github.com/rs/zerolog"
 )
 
 func GetSecret(cipherPhrase string) (string, error) {
@@ -42,4 +44,20 @@ func fetchFromFile(filename string) (string, error) {
 		return "", fmt.Errorf("Unable to read secret from file %s: %s", filename, err)
 	}
 	return strings.TrimSuffix(string(data), "\n"), nil
+}
+
+// MergeSecrets takes a key/value pair and updates with secrets
+//
+func MergeSecrets(pluginDataMapping map[string]string, log *zerolog.Logger) {
+	for key, value := range pluginDataMapping {
+		if strings.Contains(key, "secret") ||
+			strings.Contains(key, "password") {
+			plaintext, err := GetSecret(value)
+			if err != nil {
+				log.Warn().Err(err).Str("secret", key).Str("cipher_text", value).Msg("Unable to decode secret")
+			} else {
+				pluginDataMapping[key] = plaintext
+			}
+		}
+	}
 }
