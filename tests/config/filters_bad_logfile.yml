@@ -2,6 +2,6 @@ filters:
   - action: logfile
     action_args:
       - key: filename
-        value: /bad/trapex/log/cold_start.log"
+        value: /bad/trapmux/log/cold_start.log"
 
 

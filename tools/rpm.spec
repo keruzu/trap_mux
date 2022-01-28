@@ -7,7 +7,7 @@ URL: https://github.com/keruzu/trapmux
 BuildRequires: systemd
 
 %description
-Trapex is an SNMP Trap proxy/forwarder.  It can receive, filter, manipulate, 
+Trapmux is an SNMP Trap proxy/forwarder.  It can receive, filter, manipulate, 
 log, and forward SNMP traps to zero or mulitple destinations.  It can receive 
 and process SNMP v1, v2c, or v3 traps.  
 

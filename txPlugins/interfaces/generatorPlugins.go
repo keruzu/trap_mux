@@ -14,7 +14,7 @@ import (
 )
 
 type GeneratorPlugin interface {
-	Configure(trapexLog *zerolog.Logger, actionArgs map[string]string) error
+	Configure(pluginLog *zerolog.Logger, actionArgs map[string]string) error
 	GenerateTrap() (*pluginMeta.Trap, error)
 	Close() error
 }

@@ -1,14 +1,14 @@
 # The Trap MUX Configuration File
-The _trapex_ configuration file (`trapex.conf`) is used to set the various
+The _trapmux_ configuration file (`trapmux.conf`) is used to set the various
 runtime options as well as the filtering, forwarding, and logging directives.
 
 Blank lines are allowed, and those that start with `#` are for comments.
 
-There are two types of directives in the `trapex.conf` file:
+There are two types of directives in the `trapmux.conf` file:
 
 * Configuration directives:
 
-  These are lines in the file that have *trapex* configuration options and
+  These are lines in the file that have *trapmux* configuration options and
   their values. In most cases these line will have a parameter/option name
   and its corresponding value. Some directives (like 'debug') do not have 
   a value and are a boolean that is true when that entry is uncommented.
@@ -24,12 +24,12 @@ There are two types of directives in the `trapex.conf` file:
 #### _General Options:_
 * **debug**
 
-  Enable `debug` mode. This causes *trapex* to print very verbose information
+  Enable `debug` mode. This causes *trapmux* to print very verbose information
   on the incoming traps as well as the trap log entries to STDOUT.
 
-* **trapexHost `<hostname>`**
+* **trapmuxHost `<hostname>`**
 
-  Set/overide the hostname for this trapex instance. If not specified, *trapex*
+  Set/overide the hostname for this trapmux instance. If not specified, *trapmux*
   will attempt to determine the local hostname and use that. Currently, this
   data is only used for the CSV log data.
 
@@ -48,12 +48,12 @@ There are two types of directives in the `trapex.conf` file:
 * **ignoreVersions `<SNMP Version>[,<SNMP Version>]`**
 
   Specify one or more SNMP versions to ignore. Any traps that have a version
-  that matches any listed here will be ignored and dropped by trapex. Valid
+  that matches any listed here will be ignored and dropped by trapmux. Valid
   versions are: `v1`, `v2c`, and `v3` (or just `1`, `2`, `3` would suffice as
   well).  Multiple entries are separated by a comma (no spaces). 
 
   **Note:**  
-  Specifying all three versions will cause trapex to complain and exit at startup
+  Specifying all three versions will cause trapmux to complain and exit at startup
   because no traps would be processed at all in that case.
 
 #### _Log File Handling:_
@@ -78,7 +78,7 @@ CSV-based logs.
   with gzip after they are rotated.
 
 #### _SNMP v3 Setting:_
-These are options for receiving SNMP v3 traps. Note that *trapex* currently
+These are options for receiving SNMP v3 traps. Note that *trapmux* currently
 only supports the SNMP v3 *User-based Security Model* (USM).
 
 * **v3msgFlags `<AuthPriv|AuthNoPriv|NoAuthNoPriv>`**
@@ -141,7 +141,7 @@ In the filter lines, you can then use "'ipset:<ipset_name>'" in either or
 both the 'Source IP' or 'Agent Address' fields.
 
 ### FILTER DIRECTIVES
-The *trapex* configuration *filter* directives are used for specifying which
+The *trapmux* configuration *filter* directives are used for specifying which
 traps are processed and what action is taken for traps that match the filter.
 
 Each *filter* line starts with the word `filter` followed by the *filter
@@ -195,14 +195,14 @@ to match (logical AND) in order for the trap to match and trigger the action.
 
 #### _Filter Actions_
 
-The *actions* that are currenly supported by *trapex* are:
+The *actions* that are currenly supported by *trapmux* are:
 
 * **forward <ip_address:port> [break]**
 
     Forward the trap to the specified IP address and port. *WARNING:* Do
-    not specify the trapex host and port as a destination or you will
+    not specify the trapmux host and port as a destination or you will
     create a trap forwarding loop! Note that this action also supports
-    an optional second argument: 'break'. This tells trapex to stop
+    an optional second argument: 'break'. This tells trapmux to stop
     processing this trap after the forward operation.
 
 * **nat `<ip_address|$SRC_IP>`**
@@ -215,7 +215,7 @@ The *actions* that are currenly supported by *trapex* are:
     Save the trap data to the specified log file. Any files created by log
     actions are subject to the log file handling configuration directives.
     Note that this action also supports an optional second argument: 'break'.
-    This tells trapex to stop processing this trap after the log operation.
+    This tells trapmux to stop processing this trap after the log operation.
 
 * **csv `</path/to/csv/file>` [break]**
 
@@ -263,18 +263,18 @@ filter * * * * * * forward 192.168.7.7:162
 Note that this would be all traps that have made it to this filter line
 in the configuration file.
 ```
-filter * * * * * * log /opt/trapex/log/trapex.log
+filter * * * * * * log /opt/trapmux/log/trapmux.log
 ```
 
 #### Log all trap data to CSV file.
 ```
-filter * * * * * * csv /opt/trapex/log/trapex.csv
+filter * * * * * * csv /opt/trapmux/log/trapmux.csv
 ```
 
 #### Log only *coldStart* traps
 This filters on a *Generic* trap type of `0` and a specific *Enterprise* OID.
 ```
-filter * * * 0 * ^1\.3\.6\.1\.6\.3\.1\.1\.5 log /var/log/trapex-cold_start.log
+filter * * * 0 * ^1\.3\.6\.1\.6\.3\.1\.1\.5 log /var/log/trapmux-cold_start.log
 ```
 When filtering on *Enterprise OID*, a *regular expression* (*regex*) is used.
 When using a regex in a filter, you should always put a backslash (`\`) in
@@ -366,9 +366,9 @@ For cases where you would like to log specific traps to a separate log file,
 the 'log' action is used.
 
 #### Log incoming v3 traps to a specific log file.
-Here we want all incoming SNMPv3 trap to go to a log file called trapex-v3.log.
+Here we want all incoming SNMPv3 trap to go to a log file called trapmux-v3.log.
 ```
-filter  v3 * * * * * log /opt/trapex/log/trapex-v3.log
+filter  v3 * * * * * log /opt/trapmux/log/trapmux-v3.log
 ```
 
 #### Log only cold
@@ -376,10 +376,10 @@ Here we want only to log SNMP `cold start` traps from a agent addresses on a
 particular subnet, then ignore and drop the trap after that. This can be
 done in a single filter entry by using a second arg of 'break'.
 ```
-filter * * 10.22.0.0/16 0 * ^1\.3\.6\.1\.6\.3\.1\.1\.5 log /var/log/trapex-10.22-cold_start.log break
+filter * * 10.22.0.0/16 0 * ^1\.3\.6\.1\.6\.3\.1\.1\.5 log /var/log/trapmux-10.22-cold_start.log break
 ```
 
 # Author
 
-Trapex was writen by Damien Stuart - (<dstuart@dstuart.org>)
-Trap_mux was forked by Kells Kearney and subsequently maintained
+trapmux was writen by Damien Stuart - (<dstuart@dstuart.org>)
+Trapmux was forked by Kells Kearney and subsequently maintained

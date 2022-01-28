@@ -211,7 +211,7 @@ func getConfig() error {
 
 	// If this is a reconfigure, close the old handles here
 	if teConfig != nil && teConfig.teConfigured {
-		closeTrapexHandles()
+		closeHandles()
 	}
 	// Set our global config pointer to this configuration
 	newConfig.teConfigured = true
@@ -518,7 +518,7 @@ func addOidFilterObj(filter *trapmuxFilter, oid string, lineNumber int) error {
 	return nil
 }
 
-func closeTrapexHandles() {
+func closeHandles() {
 	for _, f := range teConfig.Filters {
 		if f.actionType == actionPlugin {
 			err := f.plugin.Close()

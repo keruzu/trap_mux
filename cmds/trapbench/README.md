@@ -11,7 +11,7 @@ Features:
    * resend captured traps in a loop
    * fake traffic with some uniqueness
 * monitoring hooks to display current performance information
-* allows all actions available to trapex
+* allows all actions available to trapmux
 * configuration file allows for multiple destinations, each with own configuration
 
 

@@ -6,9 +6,9 @@
 #
 ##############################################################################
 #
-TRAPEX_LOG_DIR="/opt/trapmux/log"
-CSV_ERROR_DIR="${TRAPEX_LOG_DIR}/CSV_error"
-CSV_DONE_DIR="${TRAPEX_LOG_DIR}/CSV_done"
+TRAPMUX_LOG_DIR="/opt/trapmux/log"
+CSV_ERROR_DIR="${TRAPMUX_LOG_DIR}/CSV_error"
+CSV_DONE_DIR="${TRAPMUX_LOG_DIR}/CSV_done"
 
 CSV_LOG_PATTERN="trapmux-20??-*.csv"
 
@@ -19,8 +19,8 @@ CH_PORT=${2:-"9000"}
 CH_DB=${3:-"snmp_traps"}
 
 # The trapmux log directory must exist.
-[[ -d "$TRAPEX_LOG_DIR" ]] || {
-    echo "Trapmux log directory: $TRAPEX_LOG_DIR, not found.  Aborting!" >&2
+[[ -d "$TRAPMUX_LOG_DIR" ]] || {
+    echo "Trapmux log directory: $TRAPMUX_LOG_DIR, not found.  Aborting!" >&2
     exit 1
 }
 
@@ -33,7 +33,7 @@ CH_DB=${3:-"snmp_traps"}
 
 sleep 2
 
-cd "$TRAPEX_LOG_DIR"
+cd "$TRAPMUX_LOG_DIR"
 RCSVLIST=$(ls $CSV_LOG_PATTERN)
 [[ -z "$RCSVLIST" ]] && return
 for CSV in $RCSVLIST

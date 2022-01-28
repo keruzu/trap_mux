@@ -1,5 +1,5 @@
 general:
-  hostname: trapex_test1
+  hostname: trapmux_test1
   listen_address:  127.0.0.1
   listen_port:     168
 

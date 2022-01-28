@@ -4,6 +4,6 @@ destinations defined in a configuration file.
 
 Features:
 
-* allows all actions available to trapex
+* allows all actions available to trapmux
 * configuration file allows for multiple destinations, each with own configuration
 

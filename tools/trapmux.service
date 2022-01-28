@@ -1,6 +1,6 @@
 [Unit]
 Description=SNMP trap receiver and forwarder to multiple destinations
-Documentation=https://github.com/damienstuart/trapex/tree/updates
+Documentation=https://github.com/keruzu/trapmux/tree/updates
 After=network-online.target
 Wants=network-online.target
 RequiresMountsFor=/opt
@@ -10,8 +10,8 @@ Type=simple
 Restart=always
 RestartSec=1
 StartLimitInterval=0
-EnvironmentFile=/etc/sysconfig/trapex
-ExecStart=/opt/trapex/bin/trapex -c /opt/trapex/etc/trapex.yml
+EnvironmentFile=/etc/sysconfig/trapmux
+ExecStart=/opt/trapmux/bin/trapmux -c /opt/trapmux/etc/trapmux.yml
 ExecReload=/bin/kill -HUP $MAINPID
 
 [Install]

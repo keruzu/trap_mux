@@ -1,8 +1,8 @@
 general:
-  # Specify a hostname to represent this instance of Trapex. If not set here,
+  # Specify a hostname to represent this instance of trapmux. If not set here,
   # the default will be the local hostname. This name is included in the CSV
   # log output.
-  hostname: trapex_test1
+  hostname: trapmux_test1
 
   # The listen address (what IP to bind to) and listen port. To bind to all
   # interfaces/IPs, use "0.0.0.0"
@@ -51,7 +51,7 @@ snmpv3:
   #
   msg_flags:  NoAuthNoPriv
 
-  # Note that trapex v3 support only User Security Model (USM).
+  # Note that trapmux v3 support only User Security Model (USM).
   #
   # Username can be up to 32 characters in length and include any combination
   # of alphanumeric characters (uppercase letters, lowercase letters, and
@@ -147,14 +147,14 @@ filters:
   # Note: log directories *must* exist prior to use
 
   # Log only cold start traps
-  #- "* * * 0 * ^1\\.3\\.6\\.1\\.6\\.3\\.1\\.1\\.5 log /opt/trapex/log/cold_start.log"
+  #- "* * * 0 * ^1\\.3\\.6\\.1\\.6\\.3\\.1\\.1\\.5 log /opt/trapmux/log/cold_start.log"
 
   # Log only SNMP v3 traps then stop further processing
-  #- "v3 * * * * * log /opt/trapex/log/snmpv3.log break"
+  #- "v3 * * * * * log /opt/trapmux/log/snmpv3.log break"
 
   # Log all traps after the filtering above
-  - "* * * * * * log /opt/trapex/log/trapex.log"
+  - "* * * * * * log /opt/trapmux/log/trapmux.log"
 
   # Also send traps to a CSV file. Note that this CSV format is specific to
-  # a particular table structure in a Clickhouse database: see trapex.sql
-  #- "* * * * * * csv /opt/trapex/log/trapex.csv"
+  # a particular table structure in a Clickhouse database: see trapmux.sql
+  #- "* * * * * * csv /opt/trapmux/log/trapmux.csv"
