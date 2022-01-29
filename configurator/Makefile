@@ -1,6 +1,6 @@
 
-docker_tag=trapmux_configurator
-container=trapmux_configurator
+docker_tag=configurator
+container=configurator
 PORT=5555
 
 build: Dockerfile
@@ -10,7 +10,7 @@ prep:
 	git clone https://github.com/ginkgobioworks/react-json-schema-form-builder.git
 
 run: stop build
-	docker run -d --rm  --name $(container) -p $(PORT):3000 $(docker_tag)
+	docker run -d --rm  --name $(container) -v app/src/data:/app/src/data -p $(PORT):3000 $(docker_tag)
 
 stop:
 	-docker stop $(container)
