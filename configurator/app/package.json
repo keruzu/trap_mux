@@ -1,10 +1,11 @@
 {
-  "name": "SNMP Trap MUX Configurator",
+  "name": "Configuration File Editor",
   "version": "1.0.0",
-  "description": "Load, edit and save trapmux configurations",
-  "keywords": ["SNMP", "form", "configuration"],
+  "description": "Load, edit and save configuration files",
+  "keywords": ["form", "configuration"],
   "main": "src/index.js",
   "dependencies": {
+    "axios": "",
     "bootstrap": "",
     "react": "",
     "react-dom": "",

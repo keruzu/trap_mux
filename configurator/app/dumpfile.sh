@@ -2,10 +2,10 @@
 
 FILENAME="${1:-dummy.json}"
 
-URL=http://localhost:8080/write?filename=src/data/$FILENAME
-HEADERS='Content-Type: application/json'
+CONFIG=`echo $FILENAME | sed -e 's/\.json//'`
+URL=http://localhost:8080/save/$CONFIG
 
-curl -X POST $URL -d @$FILENAME -H $HEADERS
+curl $URL -d @$FILENAME -H 'Content-Type: application/json'
 
 # Add a newline to our output
 echo

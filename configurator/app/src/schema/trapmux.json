@@ -1,6 +1,6 @@
 {
-    "$id": "https://github.com/keruzu/trap_mux/schema/trapmux.json",
-    "description": "SNMP Trap Mux Configuration File Manager",
+    "$id": "https://github.com/keruzu/trapmux/schema/trapmux.json",
+    "description": "SNMP Trap Mux Configuration",
     "properties": {
         "filters": {
             "description": "A filter matches a condition and then executes an action",

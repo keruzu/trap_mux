@@ -1,7 +1,7 @@
 {
-"short_name": "Trap MUX Configurator",
-"name": "SNMP Trap MUX Configuration File Form",
-"description": "Form-based tool to update the runtime configuration for the SNMP Trap MUX system",
-"display": "standalone
-"orientation": "portrait
+"short_name": "Configurator",
+"name": "Configuration File Form",
+"description": "Form-based tool to update the runtime configuration for daemons",
+"display": "standalone",
+"orientation": "portrait"
 }
