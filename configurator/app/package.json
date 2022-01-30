@@ -1,8 +1,8 @@
 {
-  "name": "Configuration File Editor",
+  "name": "KonFu",
   "version": "1.0.0",
   "description": "Load, edit and save configuration files",
-  "keywords": ["form", "configuration"],
+  "keywords": ["json-schema", "form", "configuration"],
   "main": "src/index.js",
   "dependencies": {
     "axios": "",
