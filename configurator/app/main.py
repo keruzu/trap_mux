@@ -34,7 +34,9 @@ def getFile(source, path):
             data = fd.read()
     except Exception as ex:
         return abort(400, "Unable to read JSON configs: %s" % ex)
-    return jsonify(data)
+
+    resp = Response(data, mimetype='application/json')
+    return resp
 
 def pathClean(base):
     try:
