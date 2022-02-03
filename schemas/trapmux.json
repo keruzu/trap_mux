@@ -1,155 +1,248 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/keruzu/trap_mux/schema/trapmux.json",
-  "title": "TrapMux Configuration File",
-  "description": "TrapMux configuration management",
-  "type": "object",
-  "properties": {
-    "general": {
-      "type": "object",
-      "plugin_path": {
-        "type": "string",
-        "default": "txPlugins"
-      }
-    },
-    "logging": {
-      "type": "object",
-      "level": {
-        "type": "string",
-        "enum": [
-          "trace",
-          "debug",
-          "info",
-          "warning",
-          "error",
-          "critical"
-        ],
-        "default": "info"
-      },
-      "log_size_max": {
-        "type": "number",
-        "default": "1024"
-      },
-      "log_backups_max": {
-        "type": "integer",
-        "default": "7"
-      },
-      "log_age_max_days": {
-        "type": "integer"
-      },
-      "compress_rotated_logs": {
-        "type": "boolean",
-        "default": "true"
-      }
-    },
-    "reporting": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "action": {
-            "type": "string"
-          },
-          "plugin_args": {
-            "type": "array",
-            "items": {
-              "key": {
-                "type": "string"
-              },
-              "value": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "listener": {
-      "type": "object",
-      "hostname": {
-        "type": "string"
-      },
-      "listen_address": {
-        "type": "string",
-        "default": "0.0.0.0"
-      },
-      "listen_port": {
-        "type": "number",
-        "default": "162"
-      },
-      "gosnmp_debug": {
-        "type": "boolean",
-        "default": "false"
-      },
-      "gosnmp_debug_logfile_name": {
-        "type": "string"
-      },
-      "ignore_versions": {
-        "type": "string",
-        "enum": [
-          "v1",
-          "v2c",
-          "v3"
-        ]
-      },
-      "snmp_community": {
-        "type": "string"
-      },
-      "msg_flags": {
-        "type": "string",
-        "enum": [
-          "NoAuthNoPriv",
-          "AuthNoPriv",
-          "AuthPriv"
-        ]
-      },
-      "username": {
-        "type": "string"
-      },
-      "auth_protocol": {
-        "type": "string",
-        "enum": [
-          "NoAuth",
-          "SHA",
-          "MD5"
-        ]
-      },
-      "auth_password": {
-        "type": "string",
-        "format": "password"
-      },
-      "privacy_protocol": {
-        "type": "string",
-        "enum": [
-          "NoPriv",
-          "AES",
-          "DES"
-        ]
-      },
-      "privacy_password": {
-        "type": "string",
-        "format": "password"
-      }
-    },
-    "ipsets": {
-      "type": "object"
-    },
-    "filters": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "action": {
-            "type": "string"
-          },
-          "plugin_args": {
+    "$id": "https://github.com/keruzu/konfu/app/src/schema/trapmux.json",
+    "type": "object",
+    "title": "SNMP Trap Mux",
+    "description": "SNMP Trap Mux Configuration",
+    "properties": {
+        "general": {
             "type": "object",
-   "additionalProperties": {
-"type": "string"
-}
-          }
+            "title": "General Settings",
+            "properties": {
+                "plugin_path": {
+                    "type": "string",
+                    "title": "Plugin Path",
+                    "description": "Path to loadable plugins",
+                    "default": "txPlugins"
+                }
+            }
+        },
+        "listener": {
+            "type": "object",
+            "title": "SNMP Trap Listener Configuration",
+            "description": "Settings that control SNMP trap reception",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "title": "Hostname",
+                    "description": "For reporting purposes, how the system records its name"
+                },
+                "listen_address": {
+                    "type": "string",
+                    "title": "Listening Address",
+                    "description": "What IPv4 / IPv6 address should this listen on?",
+                    "default": "0.0.0.0"
+                },
+                "listen_port": {
+                    "type": "number",
+                    "title": "Listening Port",
+                    "description": "Receive SNMP traps on this port",
+                    "default": 162
+                },
+                "gosnmp_debug": {
+                    "type": "boolean",
+                    "title": "GoSNMP Debug",
+                    "description": "Show verbose logging of the underlying GoSNMP library",
+                    "default": false
+                },
+                "gosnmp_debug_logfile_name": {
+                    "type": "string",
+                    "title": "GoSNMP Debug Logging File Name",
+                    "description": "Optional name to store debug-level information, otherwise goes to stdout"
+                },
+                "ignore_versions": {
+                    "type": "string",
+                    "title": "SNMP Ignore Versions",
+                    "description": "SNMP versions to support receive traps",
+                    "enum": [
+                        "v1",
+                        "v2c",
+                        "v3"
+                    ]
+                },
+                "snmp_community": {
+                    "type": "string",
+                    "title": "SNMP Community",
+                    "description": "The SNMP Community is used as a simple control to prevent snooping"
+                },
+                "msg_flags": {
+                    "type": "string",
+                    "title": "SNMP v3 Security Options",
+                    "description": "Authentication options for SNMP v3",
+                    "enum": [
+                        "NoAuthNoPriv",
+                        "AuthNoPriv",
+                        "AuthPriv"
+                    ]
+                },
+                "username": {
+                    "type": "string",
+                    "title": "Username",
+                    "description": "User name used to authenticate"
+                },
+                "auth_protocol": {
+                    "type": "string",
+                    "title": "Authentication Protocol",
+                    "description": "Protocol for authenticating a connection",
+                    "enum": [
+                        "NoAuth",
+                        "SHA",
+                        "MD5"
+                    ]
+                },
+                "auth_password": {
+                    "type": "string",
+                    "title": "Authentication Password",
+                    "description": "Password for authentication",
+                    "format": "password"
+                },
+                "privacy_protocol": {
+                    "type": "string",
+                    "title": "Privacy Protocol",
+                    "description": "Protocol for securing an existing connection",
+                    "enum": [
+                        "NoPriv",
+                        "AES",
+                        "DES"
+                    ]
+                },
+                "privacy_password": {
+                    "type": "string",
+                    "format": "password",
+                    "title": "Privacy Password",
+                    "description": "Password for privacy"
+                }
+            }
+        },
+        "logging": {
+            "type": "object",
+            "title": "Logging Configuration",
+            "properties": {
+                "level": {
+                    "type": "string",
+                    "title": "Log Level",
+                    "description": "Amount of logging detail to include",
+                    "enum": [
+                        "trace",
+                        "debug",
+                        "info",
+                        "warning",
+                        "error",
+                        "critical"
+                    ],
+                    "default": "info"
+                },
+                "log_size_max": {
+                    "type": "number",
+                    "title": "Log Size (Max)",
+                    "description": "Size in MB",
+                    "default": 1024
+                },
+                "log_age_max_days": {
+                    "type": "number",
+                    "title": "Log File Retention",
+                    "description": "Age in days of backup files to keep, maximum"
+                },
+                "log_backups_max": {
+                    "type": "number",
+                    "title": "Log File Backups",
+                    "description": "Number of backup files to keep, maximum",
+                    "minimum": 0,
+                    "default": 7
+                },
+                "compress_rotated_logs": {
+                    "type": "boolean",
+                    "title": "Rotated Log Compression",
+                    "description": "Should old logs be compressed?",
+                    "default": true
+                }
+            }
+        },
+        "reporting": {
+            "type": "array",
+            "title": "Metric Reporting Plugin Configuration",
+            "description": "These plugins determine what metrics to record and how to expose them",
+            "items": {
+                "anyOf" : [
+                    {
+                        "type" : "object",
+                        "title": "Prometheus",
+                        "description": "Prometheus metric exporter",
+                        "properties" : {
+                            "action" : {
+                                "type" : "string",
+                                "title": "Plugin",
+                                "default" : "prometheus"
+                            },
+                            "listen_ip" : {
+                                "type" : "string",
+                                "title": "Presentation IP",
+                                "description": "IP address to bind",
+                                "default": "0.0.0.0"
+                            },
+                            "listen_port" : {
+                                "type" : "string",
+                                "title": "Presentation Port",
+                                "description": "Port",
+                                "default": "8080"
+                            },
+                            "endpoint" : {
+                                "type" : "string",
+                                "title": "URL Endpoint",
+                                "description": "End of the URL to GET",
+                                "default": "metrics"
+                            }
+                        }
+                    },
+                    {           
+                        "type" : "object",
+                        "title": "rate_tracker",
+                        "description": "Track rates over time periods",
+                        "properties" : {
+                            "action" : {
+                                "type" : "string",
+                                "title": "Plugin",
+                                "default" : "rate_tracker"
+                            }
+                        }
+                    },
+                    {
+                        "type" : "object",
+                        "title": "no_op",
+                        "description": "Do nothing",
+                        "properties" : {
+                            "action" : { 
+                                "type" : "string",
+                                "title": "Plugin",
+                                "default" : "no_op"
+                            }
+                        }
+                    }
+            ]
         }
-      }
+    },
+        "ipsets": {
+            "type": "object",
+            "title": "IP Sets",
+            "description": "An IP set is a named grouping of IP references eg CIDR, regexp, IP"
+        },
+        "filters": {
+            "type": "array",
+            "title": "Filters",
+            "description": "A filter matches a condition and then executes an action",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string"
+                    },
+                    "plugin_args": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
     }
-  }
 }
