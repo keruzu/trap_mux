@@ -1,6 +1,0 @@
-npm audit
-npm start
-node server.js &
-kill %1
-curl localhost:8080/read?schema=src/schema/trapmux.json
-dumpfile.sh dummy.json

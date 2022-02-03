@@ -1,7 +1,0 @@
-{
-"short_name": "KonFu",
-"name": "Configuration File Form",
-"description": "Form-based tool to update the runtime configuration for daemons",
-"display": "standalone",
-"orientation": "portrait"
-}
