@@ -18,7 +18,7 @@ import (
 	"github.com/rs/zerolog"
 
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"
-	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
+	pluginLoader "github.com/keruzu/trapmux/api"
 )
 
 var trapmuxLog = zerolog.New(os.Stdout).With().Timestamp().Logger()
