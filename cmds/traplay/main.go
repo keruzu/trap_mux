@@ -15,7 +15,7 @@ import (
 	"path/filepath"
 
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"
-	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
+	pluginLoader "github.com/keruzu/trapmux/api"
 
 	"github.com/rs/zerolog"
 )
