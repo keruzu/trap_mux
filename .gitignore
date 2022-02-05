@@ -4,6 +4,9 @@
 *.dll
 *.so
 *.dylib
+cmds/trapux/trapmux
+cmds/traplay/traplay
+cmds/trapbench/trapbench
 
 # Test binary, build with `go test -c`
 *.test
@@ -11,7 +14,6 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-trapex
 log
 *.log
 # DSS Misc
