@@ -14,7 +14,7 @@ import (
 	"strings"
 
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"
-	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
+	pluginLoader "github.com/keruzu/trapmux/api"
 
 	"github.com/creasty/defaults"
 	"gopkg.in/yaml.v2"

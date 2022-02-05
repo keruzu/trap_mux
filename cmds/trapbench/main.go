@@ -12,7 +12,7 @@ import (
 	"time"
 	"path/filepath"
 
-	pluginLoader "github.com/keruzu/trapmux/txPlugins/interfaces"
+	pluginLoader "github.com/keruzu/trapmux/api"
 
 	"github.com/rs/zerolog"
 )
