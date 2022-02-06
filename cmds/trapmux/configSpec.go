@@ -77,7 +77,6 @@ type trapmuxFilter struct {
 	plugin     pluginLoader.ActionPlugin
 }
 
-
 type MetricConfig struct {
 	PluginName string            `default:"" json:"plugin"`
 	Args       map[string]string `default:"{}" json:"args"`

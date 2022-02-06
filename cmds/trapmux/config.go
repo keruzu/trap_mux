@@ -126,7 +126,7 @@ func loadConfig(config_file string, newConfig *trapmuxConfig) error {
 		}
 	}
 
-		err = json.Unmarshal(configData, newConfig)
+	err = json.Unmarshal(configData, newConfig)
 	if err != nil {
 		return err
 	}
