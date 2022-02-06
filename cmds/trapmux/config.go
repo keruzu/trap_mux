@@ -101,10 +101,12 @@ func processCommandLine() {
 // loadConfig
 // Load a YAML or JSON file with configuration, and create a new object
 func loadConfig(config_file string, newConfig *trapmuxConfig) error {
+        if teCmdLine.configFormat == "yaml" {
         configerr := defaults.Set(newConfig)
         if configerr != nil {
                 return configerr
         }
+}
 
 	newConfig.IpSets = make(map[string]IpSet)
 

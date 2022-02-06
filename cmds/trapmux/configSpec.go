@@ -91,6 +91,7 @@ func (s *trapmuxFilter) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	return nil
 }
 
+
 type MetricConfig struct {
 	PluginName string            `default:"" yaml:"plugin" json:"plugin"`
 	Args       map[string]string `default:"{}" yaml:"args" json:"args"`
