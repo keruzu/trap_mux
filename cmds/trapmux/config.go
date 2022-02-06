@@ -268,7 +268,7 @@ func validateIgnoreVersions(newConfig *trapmuxConfig) error {
 
 func validateSnmpV3Args(params *trapListenerConfig) error {
 	switch strings.ToLower(params.MsgFlags_str) {
-	case "noauthnopriv":
+	case "noauthnopriv", "":
 		params.MsgFlags = g.NoAuthNoPriv
 	case "authnopriv":
 		params.MsgFlags = g.AuthNoPriv
@@ -279,7 +279,7 @@ func validateSnmpV3Args(params *trapListenerConfig) error {
 	}
 
 	switch strings.ToLower(params.AuthProto_str) {
-	case "noauth":
+	case "noauth", "":
 		params.AuthProto = g.NoAuth
 	case "sha":
 		params.AuthProto = g.SHA
@@ -298,7 +298,7 @@ func validateSnmpV3Args(params *trapListenerConfig) error {
 	params.AuthPassword = plaintext
 
 	switch strings.ToLower(params.PrivacyProto_str) {
-	case "nopriv":
+	case "nopriv", "":
 		params.PrivacyProto = g.NoPriv
 	case "aes":
 		params.PrivacyProto = g.AES
