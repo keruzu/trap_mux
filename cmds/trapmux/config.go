@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"encoding/json"
 
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	pluginLoader "github.com/keruzu/trapmux/api"
@@ -37,6 +38,7 @@ Notes on YAML configuration processing:
 
 type trapmuxCommandLine struct {
 	configFile string
+	configFormat string
 	bindAddr   string
 	listenPort string
 	debugMode  bool
@@ -67,6 +69,7 @@ func processCommandLine() {
 	c := flag.String("c", "/opt/trapmux/etc/trapmux.yml", "")
 	b := flag.String("b", "", "")
 	p := flag.String("p", "", "")
+	f := flag.String("f", "yaml", "")
 	d := flag.Bool("d", false, "")
 	showVersion := flag.Bool("v", false, "")
 
@@ -77,11 +80,18 @@ func processCommandLine() {
 		os.Exit(0)
 	}
 
+	teCmdLine.configFormat = *f
 	uri := os.Getenv("TRAPMUX_CONFIG_URI")
 	if uri != "" {
 		teCmdLine.configFile = uri
+                if strings.HasSuffix(uri, "json") {
+	teCmdLine.configFormat = "json"
+                }
 	} else {
 		teCmdLine.configFile = *c
+                if strings.HasSuffix(*c, "json") {
+	teCmdLine.configFormat = "json"
+                }
 	}
 	teCmdLine.bindAddr = *b
 	teCmdLine.listenPort = *p
@@ -89,7 +99,7 @@ func processCommandLine() {
 }
 
 // loadConfig
-// Load a YAML file with configuration, and create a new object
+// Load a YAML or JSON file with configuration, and create a new object
 func loadConfig(config_file string, newConfig *trapmuxConfig) error {
         configerr := defaults.Set(newConfig)
         if configerr != nil {
@@ -98,7 +108,7 @@ func loadConfig(config_file string, newConfig *trapmuxConfig) error {
 
 	newConfig.IpSets = make(map[string]IpSet)
 
-	var yamlFile []byte
+	var configData []byte
 	var err error
 
 	if strings.HasPrefix(config_file, "http") {
@@ -115,20 +125,25 @@ func loadConfig(config_file string, newConfig *trapmuxConfig) error {
 		if err != nil {
 			return err
 		}
-		yamlFile := make([]byte, response.ContentLength)
-		_, err = response.Body.Read(yamlFile)
+		configData = make([]byte, response.ContentLength)
+		_, err = response.Body.Read(configData)
 		if err != nil {
 			return err
 		}
 
 	} else {
 		filename, _ := filepath.Abs(config_file)
-		yamlFile, err = ioutil.ReadFile(filepath.Clean(filename))
+		configData, err = ioutil.ReadFile(filepath.Clean(filename))
 		if err != nil {
 			return err
 		}
 	}
-	err = yaml.UnmarshalStrict(yamlFile, newConfig)
+
+        if teCmdLine.configFormat == "yaml" {
+	    err = yaml.UnmarshalStrict(configData, newConfig)
+        } else {
+	    err = json.Unmarshal(configData, newConfig)
+        }
 	if err != nil {
 		return err
 	}
