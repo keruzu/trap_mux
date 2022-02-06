@@ -4,7 +4,7 @@
 *.dll
 *.so
 *.dylib
-cmds/trapux/trapmux
+cmds/trapmux/trapmux
 cmds/traplay/traplay
 cmds/trapbench/trapbench
 
