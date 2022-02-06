@@ -11,7 +11,7 @@ container_clickhouse = clickhouse
 
 
 build:
-	go build
+	cd cmds && make
 
 build_all: plugins build
 
@@ -26,11 +26,8 @@ test: build
 	cd txPlugins && go test
 
 fmt:
-	gofmt -w *.go
 	gofmt -w txPlugins/*.go
-	gofmt -w txPlugins/actions/*/*.go
-	gofmt -w txPlugins/generators/*/*.go
-	gofmt -w txPlugins/metrics/*/*.go
+	gofmt -w txPlugins/*/*/*.go
 	gofmt -w cmds/*/*.go
 	git commit -m "gofmt" -a
 
