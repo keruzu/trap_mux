@@ -21,13 +21,12 @@ import (
 
 	"github.com/creasty/defaults"
 	g "github.com/gosnmp/gosnmp"
-	"gopkg.in/yaml.v2"
 )
 
 /* ===========================================================
-Notes on YAML configuration processing:
+Notes on JSON configuration processing:
  * Variables that start with capital letters are processed (at least, for JSON)
- * Renaming of variables for the YAML file is done with the `yaml:` directives
+ * Renaming of variables for the JSON file is done with the `json:` directives
  * Renamed variables *must* be in quotes to be recognized correctly (at least for underscores)
  * Default values are being applied with the creasty/defaults module
  * Non-basic types and classes can't be instantiated directly (eg g.SHA)
@@ -69,7 +68,6 @@ func processCommandLine() {
 	c := flag.String("c", "/opt/trapmux/etc/trapmux.yml", "")
 	b := flag.String("b", "", "")
 	p := flag.String("p", "", "")
-	f := flag.String("f", "yaml", "")
 	d := flag.Bool("d", false, "")
 	showVersion := flag.Bool("v", false, "")
 
@@ -84,14 +82,8 @@ func processCommandLine() {
 	uri := os.Getenv("TRAPMUX_CONFIG_URI")
 	if uri != "" {
 		teCmdLine.configFile = uri
-		if strings.HasSuffix(uri, "json") {
-			teCmdLine.configFormat = "json"
-		}
 	} else {
 		teCmdLine.configFile = *c
-		if strings.HasSuffix(*c, "json") {
-			teCmdLine.configFormat = "json"
-		}
 	}
 	teCmdLine.bindAddr = *b
 	teCmdLine.listenPort = *p
@@ -99,15 +91,8 @@ func processCommandLine() {
 }
 
 // loadConfig
-// Load a YAML or JSON file with configuration, and create a new object
+// Load a JSON file with configuration, and create a new object
 func loadConfig(config_file string, newConfig *trapmuxConfig) error {
-	if teCmdLine.configFormat == "yaml" {
-		configerr := defaults.Set(newConfig)
-		if configerr != nil {
-			return configerr
-		}
-	}
-
 	newConfig.IpSets = make(map[string]IpSet)
 
 	var configData []byte
@@ -141,11 +126,7 @@ func loadConfig(config_file string, newConfig *trapmuxConfig) error {
 		}
 	}
 
-	if teCmdLine.configFormat == "yaml" {
-		err = yaml.UnmarshalStrict(configData, newConfig)
-	} else {
 		err = json.Unmarshal(configData, newConfig)
-	}
 	if err != nil {
 		return err
 	}
