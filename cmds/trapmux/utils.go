@@ -9,8 +9,8 @@ import (
 	"encoding/json"
 	"net"
 
-	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	g "github.com/gosnmp/gosnmp"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 )
 
 // network stuct holds the data parsed from a CIDR representation of a

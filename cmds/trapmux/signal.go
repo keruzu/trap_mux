@@ -35,10 +35,10 @@ func handleSIGUSR2(sigCh chan os.Signal) {
 			mainLog.Info().Msg("Got SIGUSR2")
 			for _, f := range teConfig.Filters {
 				if f.actionType == actionPlugin {
-				err :=	f.plugin.(pluginLoader.ActionPlugin).SigUsr2()
-if err != nil {
-				mainLog.Warn().Err(err).Msg("Issue handling action")
-}
+					err := f.plugin.(pluginLoader.ActionPlugin).SigUsr2()
+					if err != nil {
+						mainLog.Warn().Err(err).Msg("Issue handling action")
+					}
 				}
 			}
 		}

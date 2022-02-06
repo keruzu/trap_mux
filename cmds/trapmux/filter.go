@@ -10,8 +10,8 @@ import (
 	"regexp"
 	"strings"
 
-	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	pluginLoader "github.com/keruzu/trapmux/api"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 )
 
 // Filter types

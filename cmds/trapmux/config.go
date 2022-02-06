@@ -6,6 +6,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -14,10 +15,9 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-	"encoding/json"
 
-	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 	pluginLoader "github.com/keruzu/trapmux/api"
+	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
 	"github.com/creasty/defaults"
 	g "github.com/gosnmp/gosnmp"
@@ -37,11 +37,11 @@ Notes on YAML configuration processing:
 */
 
 type trapmuxCommandLine struct {
-	configFile string
+	configFile   string
 	configFormat string
-	bindAddr   string
-	listenPort string
-	debugMode  bool
+	bindAddr     string
+	listenPort   string
+	debugMode    bool
 }
 
 // Global vars
@@ -84,14 +84,14 @@ func processCommandLine() {
 	uri := os.Getenv("TRAPMUX_CONFIG_URI")
 	if uri != "" {
 		teCmdLine.configFile = uri
-                if strings.HasSuffix(uri, "json") {
-	teCmdLine.configFormat = "json"
-                }
+		if strings.HasSuffix(uri, "json") {
+			teCmdLine.configFormat = "json"
+		}
 	} else {
 		teCmdLine.configFile = *c
-                if strings.HasSuffix(*c, "json") {
-	teCmdLine.configFormat = "json"
-                }
+		if strings.HasSuffix(*c, "json") {
+			teCmdLine.configFormat = "json"
+		}
 	}
 	teCmdLine.bindAddr = *b
 	teCmdLine.listenPort = *p
@@ -101,12 +101,12 @@ func processCommandLine() {
 // loadConfig
 // Load a YAML or JSON file with configuration, and create a new object
 func loadConfig(config_file string, newConfig *trapmuxConfig) error {
-        if teCmdLine.configFormat == "yaml" {
-        configerr := defaults.Set(newConfig)
-        if configerr != nil {
-                return configerr
-        }
-}
+	if teCmdLine.configFormat == "yaml" {
+		configerr := defaults.Set(newConfig)
+		if configerr != nil {
+			return configerr
+		}
+	}
 
 	newConfig.IpSets = make(map[string]IpSet)
 
@@ -115,14 +115,14 @@ func loadConfig(config_file string, newConfig *trapmuxConfig) error {
 
 	if strings.HasPrefix(config_file, "http") {
 		var response *http.Response
-                /*
-                 *  gosec complains about the following:
-                 * G107 (CWE-88): Potential HTTP request made with variable url (Confidence: MEDIUM, Severity: MEDIUM)
-                 * The issue is that we really do want the user-specified URL to control things,
-                 * but there doesn't seem to be a good sandbox for doing something sane.
-                 *
-                 * FIXME: Use a regex to validate the URL?
-                 */ 
+		/*
+		 *  gosec complains about the following:
+		 * G107 (CWE-88): Potential HTTP request made with variable url (Confidence: MEDIUM, Severity: MEDIUM)
+		 * The issue is that we really do want the user-specified URL to control things,
+		 * but there doesn't seem to be a good sandbox for doing something sane.
+		 *
+		 * FIXME: Use a regex to validate the URL?
+		 */
 		response, err = http.Get(config_file)
 		if err != nil {
 			return err
@@ -141,11 +141,11 @@ func loadConfig(config_file string, newConfig *trapmuxConfig) error {
 		}
 	}
 
-        if teCmdLine.configFormat == "yaml" {
-	    err = yaml.UnmarshalStrict(configData, newConfig)
-        } else {
-	    err = json.Unmarshal(configData, newConfig)
-        }
+	if teCmdLine.configFormat == "yaml" {
+		err = yaml.UnmarshalStrict(configData, newConfig)
+	} else {
+		err = json.Unmarshal(configData, newConfig)
+	}
 	if err != nil {
 		return err
 	}
@@ -420,14 +420,13 @@ func setAction(filter *trapmuxFilter, pluginPathExpr string, lineNumber int) err
 		if err != nil {
 			return fmt.Errorf("unable to load plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
-                pluginMeta.MergeSecrets(filter.ActionArgs, &mainLog)
+		pluginMeta.MergeSecrets(filter.ActionArgs, &mainLog)
 		if err = filter.plugin.Configure(&mainLog, filter.ActionArgs); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
 	}
 	return nil
 }
-
 
 // addSnmpFilterObj adds a filter if necessary
 // An empty arry of filters is interpreted to mean "All versions should match"
@@ -522,10 +521,10 @@ func closeHandles() {
 	for _, f := range teConfig.Filters {
 		if f.actionType == actionPlugin {
 			err := f.plugin.Close()
-if err != nil {
-			mainLog.Warn().Err(err).Str("plugin_name", f.ActionName).Msg("Unable to perform close operation")
+			if err != nil {
+				mainLog.Warn().Err(err).Str("plugin_name", f.ActionName).Msg("Unable to perform close operation")
+			}
 		}
-}
 	}
 }
 
@@ -539,7 +538,7 @@ func addReportingPlugins(newConfig *trapmuxConfig) error {
 			mainLog.Fatal().Err(err).Str("plugin_name", config.PluginName).Msg("Unable to load metric reporting plugin")
 			return err
 		}
-pluginMeta.MergeSecrets(config.Args, &mainLog)
+		pluginMeta.MergeSecrets(config.Args, &mainLog)
 		if err = config.plugin.Configure(&mainLog, config.Args, counters); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", config.PluginName, i, err)
 		}

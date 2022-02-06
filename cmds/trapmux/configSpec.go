@@ -7,8 +7,8 @@ package main
 
 import (
 	"github.com/creasty/defaults"
-	pluginLoader "github.com/keruzu/trapmux/api"
 	g "github.com/gosnmp/gosnmp"
+	pluginLoader "github.com/keruzu/trapmux/api"
 )
 
 type trapListenerConfig struct {
@@ -79,10 +79,10 @@ type trapmuxFilter struct {
 
 // UnmarshalYAML is what enables the setter to work for the trapmuxFilter
 func (s *trapmuxFilter) UnmarshalYAML(unmarshal func(interface{}) error) error {
-        configerr := defaults.Set(s)
-        if configerr != nil {
-                return configerr
-        }
+	configerr := defaults.Set(s)
+	if configerr != nil {
+		return configerr
+	}
 
 	type plain trapmuxFilter
 	if err := unmarshal((*plain)(s)); err != nil {
@@ -90,7 +90,6 @@ func (s *trapmuxFilter) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	}
 	return nil
 }
-
 
 type MetricConfig struct {
 	PluginName string            `default:"" yaml:"plugin" json:"plugin"`
