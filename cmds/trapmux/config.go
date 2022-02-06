@@ -193,7 +193,7 @@ func getConfig() error {
 	} else {
 		operation = "Loading"
 	}
-	trapmuxLog.Info().Str("version", myVersion).Str("configuration_file", teCmdLine.configFile).Msg(operation + " configuration for trapmux")
+	mainLog.Info().Str("version", myVersion).Str("configuration_file", teCmdLine.configFile).Msg(operation + " configuration for trapmux")
 
 	var newConfig trapmuxConfig
 	err := loadConfig(teCmdLine.configFile, &newConfig)
@@ -325,12 +325,12 @@ func validateSnmpV3Args(params *trapListenerConfig) error {
 func addIpSets(newConfig *trapmuxConfig) error {
 	for _, stanza := range newConfig.IpSets_str {
 		for ipsName, ips := range stanza {
-			trapmuxLog.Debug().Str("ipset", ipsName).Msg("Loading IpSet")
+			mainLog.Debug().Str("ipset", ipsName).Msg("Loading IpSet")
 			newConfig.IpSets[ipsName] = make(map[string]bool)
 			for _, ip := range ips {
 				if ipRe.MatchString(ip) {
 					newConfig.IpSets[ipsName][ip] = true
-					trapmuxLog.Debug().Str("ipset", ipsName).Str("ip", ip).Msg("Adding IP to IpSet")
+					mainLog.Debug().Str("ipset", ipsName).Str("ip", ip).Msg("Adding IP to IpSet")
 				} else {
 					return fmt.Errorf("invalid IP address (%s) in ipset: %s", ip, ipsName)
 				}
@@ -350,7 +350,7 @@ func addFilters(newConfig *trapmuxConfig) error {
 			return err
 		}
 	}
-	trapmuxLog.Info().Int("num_filters", len(newConfig.Filters)).Msg("Configured filter conditions")
+	mainLog.Info().Int("num_filters", len(newConfig.Filters)).Msg("Configured filter conditions")
 	return nil
 }
 
@@ -364,7 +364,7 @@ func addPluginErrorActions(newConfig *trapmuxConfig) error {
 			return err
 		}
 	}
-	trapmuxLog.Info().Int("num_filters", len(newConfig.PluginErrorActions)).Msg("Configured plugin error conditions")
+	mainLog.Info().Int("num_filters", len(newConfig.PluginErrorActions)).Msg("Configured plugin error conditions")
 	return nil
 }
 
@@ -418,8 +418,8 @@ func setAction(filter *trapmuxFilter, pluginPathExpr string, lineNumber int) err
 		if err != nil {
 			return fmt.Errorf("unable to load plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
-                pluginMeta.MergeSecrets(filter.ActionArgs, &trapmuxLog)
-		if err = filter.plugin.Configure(&trapmuxLog, filter.ActionArgs); err != nil {
+                pluginMeta.MergeSecrets(filter.ActionArgs, &mainLog)
+		if err = filter.plugin.Configure(&mainLog, filter.ActionArgs); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", filter.ActionName, lineNumber, err)
 		}
 	}
@@ -521,7 +521,7 @@ func closeHandles() {
 		if f.actionType == actionPlugin {
 			err := f.plugin.Close()
 if err != nil {
-			trapmuxLog.Warn().Err(err).Str("plugin_name", f.ActionName).Msg("Unable to perform close operation")
+			mainLog.Warn().Err(err).Str("plugin_name", f.ActionName).Msg("Unable to perform close operation")
 		}
 }
 	}
@@ -534,14 +534,14 @@ func addReportingPlugins(newConfig *trapmuxConfig) error {
 	for i, config := range newConfig.Reporting {
 		config.plugin, err = pluginLoader.LoadMetricPlugin(teConfig.General.PluginPath, config.PluginName)
 		if err != nil {
-			trapmuxLog.Fatal().Err(err).Str("plugin_name", config.PluginName).Msg("Unable to load metric reporting plugin")
+			mainLog.Fatal().Err(err).Str("plugin_name", config.PluginName).Msg("Unable to load metric reporting plugin")
 			return err
 		}
-pluginMeta.MergeSecrets(config.Args, &trapmuxLog)
-		if err = config.plugin.Configure(&trapmuxLog, config.Args, counters); err != nil {
+pluginMeta.MergeSecrets(config.Args, &mainLog)
+		if err = config.plugin.Configure(&mainLog, config.Args, counters); err != nil {
 			return fmt.Errorf("unable to configure plugin %s at line %v: %s", config.PluginName, i, err)
 		}
 	}
-	trapmuxLog.Info().Int("num_reporters", len(newConfig.Reporting)).Msg("Configured metric reporting plugins")
+	mainLog.Info().Int("num_reporters", len(newConfig.Reporting)).Msg("Configured metric reporting plugins")
 	return nil
 }

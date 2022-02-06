@@ -24,7 +24,7 @@ func TestPluginInterfacess(t *testing.T) {
 	}
 	/*
 	                   if err == nil {
-	                           filter.action.Configure(trapmuxLog, actionArg, &newConfig.FilterPluginsConfig)
+	                           filter.action.Configure(mainLog, actionArg, &newConfig.FilterPluginsConfig)
 	                   }
 
 	   	var testConfig trapmuxConfig

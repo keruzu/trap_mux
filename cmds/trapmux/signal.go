@@ -20,7 +20,7 @@ func handleSIGHUP(sigCh chan os.Signal) {
 		case <-sigCh:
 			fmt.Printf("Got SIGHUP - Reloading configuration.\n")
 			if err := getConfig(); err != nil {
-				trapmuxLog.Info().Err(err).Msg("Error parsing configuration\nConfiguration was not changed")
+				mainLog.Info().Err(err).Msg("Error parsing configuration\nConfiguration was not changed")
 			}
 		}
 	}
@@ -32,12 +32,12 @@ func handleSIGUSR2(sigCh chan os.Signal) {
 	for {
 		select {
 		case <-sigCh:
-			trapmuxLog.Info().Msg("Got SIGUSR2")
+			mainLog.Info().Msg("Got SIGUSR2")
 			for _, f := range teConfig.Filters {
 				if f.actionType == actionPlugin {
 				err :=	f.plugin.(pluginLoader.ActionPlugin).SigUsr2()
 if err != nil {
-				trapmuxLog.Warn().Err(err).Msg("Issue handling action")
+				mainLog.Warn().Err(err).Msg("Issue handling action")
 }
 				}
 			}

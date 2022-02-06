@@ -121,10 +121,10 @@ func (f *trapmuxFilter) processAction(trap *pluginMeta.Trap) error {
 	case actionPlugin:
 		err = f.plugin.(pluginLoader.ActionPlugin).ProcessTrap(trap)
 		if err != nil {
-			trapmuxLog.Err(err).Str("plugin", f.ActionName).Msg("Issue in processing trap by plugin")
+			mainLog.Err(err).Str("plugin", f.ActionName).Msg("Issue in processing trap by plugin")
 		}
 	default:
-		trapmuxLog.Warn().Int("action_type", f.actionType).Msg("Unkown action type given to processAction")
+		mainLog.Warn().Int("action_type", f.actionType).Msg("Unkown action type given to processAction")
 	}
 	if f.BreakAfter {
 		trap.Dropped = true

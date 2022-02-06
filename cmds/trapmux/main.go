@@ -21,7 +21,7 @@ import (
 	pluginLoader "github.com/keruzu/trapmux/api"
 )
 
-var trapmuxLog = zerolog.New(os.Stdout).With().Timestamp().Logger()
+var mainLog = zerolog.New(os.Stdout).With().Timestamp().Logger()
 
 func main() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
@@ -35,7 +35,7 @@ func main() {
 	processCommandLine()
 
 	if err := getConfig(); err != nil {
-		trapmuxLog.Fatal().Err(err).Msg("Unable to load configuration")
+		mainLog.Fatal().Err(err).Msg("Unable to load configuration")
 		os.Exit(1)
 	}
 
@@ -55,13 +55,13 @@ func startTrapListener() {
 	trapListener.OnNewTrap = trapHandler
 
 	if teConfig.TrapReceiverSettings.GoSnmpDebug {
-		trapmuxLog.Info().Msg("gosnmp debug mode enabled")
+		mainLog.Info().Msg("gosnmp debug mode enabled")
 		if teConfig.TrapReceiverSettings.GoSnmpDebugLogName == "" {
 			trapListener.Params.Logger = g.NewLogger(log.New(os.Stdout, "", 0))
 		} else {
 			fd, err := os.Open(teConfig.TrapReceiverSettings.GoSnmpDebugLogName)
 			if err != nil {
-				trapmuxLog.Fatal().Err(err).Str("filename", teConfig.TrapReceiverSettings.GoSnmpDebugLogName).Msg("Unable to open up debug log")
+				mainLog.Fatal().Err(err).Str("filename", teConfig.TrapReceiverSettings.GoSnmpDebugLogName).Msg("Unable to open up debug log")
 				os.Exit(1)
 			}
 			trapListener.Params.Logger = g.NewLogger(log.New(fd, "", 0))
@@ -84,7 +84,7 @@ func startTrapListener() {
 	}
 
 	listenAddr := fmt.Sprintf("%s:%s", teConfig.TrapReceiverSettings.ListenAddr, teConfig.TrapReceiverSettings.ListenPort)
-	trapmuxLog.Info().Str("listen_address", listenAddr).Msg("Start trapmux listener")
+	mainLog.Info().Str("listen_address", listenAddr).Msg("Start trapmux listener")
 	err := trapListener.Listen(listenAddr)
 	if err != nil {
 		log.Panicf("error in listen on %s: %s", listenAddr, err)
@@ -146,7 +146,7 @@ func trapHandler(p *g.SnmpPacket, addr *net.UDPAddr) {
 	if teConfig.Logging.Level == "debug" {
 		var info string
 		info = makeTrapLogEntry(&trap)
-		trapmuxLog.Debug().Str("trap", info).Msg("Raw trap info")
+		mainLog.Debug().Str("trap", info).Msg("Raw trap info")
 	}
 
 	processTrap(&trap)
