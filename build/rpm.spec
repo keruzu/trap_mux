@@ -32,6 +32,9 @@ install -m 750 build/process_csv_data.sh %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/traplay/traplay %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/trapbench/trapbench %{buildroot}/opt/%{name}/bin
 
+mkdir -p %{buildroot}/opt/%{name}/schemas
+install -m 644 schemas/*.json %{buildroot}/opt/%{name}/schemas
+
 mkdir -p %{buildroot}/opt/%{name}/etc
 install -m 644 build/trapmux.json %{buildroot}/opt/%{name}/etc
 
@@ -54,6 +57,7 @@ done
 %dir /opt/%{name}/bin
 %dir /opt/%{name}/etc
 %dir /opt/%{name}/log
+%dir /opt/%{name}/schemas
 %dir /opt/%{name}/clickhouse
 %dir /opt/%{name}/clickhouse/exported
 %dir /opt/%{name}/plugins
@@ -65,6 +69,7 @@ done
 /opt/%{name}/README.md
 /opt/%{name}/plugins/actions/*.so
 /opt/%{name}/plugins/generators/*.so
+/opt/%{name}/schemas/*.json
 
 %pre
 # Check for upgrades
