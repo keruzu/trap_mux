@@ -18,8 +18,6 @@ and process SNMP v1, v2c, or v3 traps.
 if [ -n "$CODEBUILD_SRC_DIR" ] ; then
     # AWS CodeBuild source directory
     cd $CODEBUILD_SRC_DIR
-else
-    cd ~/go/src/trapmux
 fi
 
 mkdir -p %{buildroot}%{_sysconfdir}/systemd/system
