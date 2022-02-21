@@ -19,7 +19,6 @@ import (
 	pluginLoader "github.com/keruzu/trapmux/api"
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
-	"github.com/creasty/defaults"
 	g "github.com/gosnmp/gosnmp"
 )
 
@@ -68,6 +67,7 @@ func processCommandLine() {
 	c := flag.String("c", "/opt/trapmux/etc/trapmux.yml", "")
 	b := flag.String("b", "", "")
 	p := flag.String("p", "", "")
+	f := flag.String("f", "", "")
 	d := flag.Bool("d", false, "")
 	showVersion := flag.Bool("v", false, "")
 
