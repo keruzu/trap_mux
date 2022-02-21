@@ -44,12 +44,12 @@ install -m 644 build/trapmux.json %{buildroot}/opt/%{name}/etc
 mkdir -p %{buildroot}/opt/%{name}/log
 
 mkdir -p %{buildroot}/opt/%{name}/plugins/actions
-for plugin in `ls -1 txPlugins/actions/*/*.so`; do
+for plugin in `ls -1 txPlugins/actions/*.so`; do
     install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/actions
 done
 
 mkdir -p %{buildroot}/opt/%{name}/plugins/generators
-for plugin in `ls -1 txPlugins/generators/*/*.so`; do
+for plugin in `ls -1 txPlugins/generators/*.so`; do
     install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/generators
 done
 
