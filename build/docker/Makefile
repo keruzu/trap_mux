@@ -1,8 +1,9 @@
 
 BUILDARCH=x86_64
 TARGET=trapmux
-image = alpine:3.15
+image = centos:7
 docker_tag_trapmux = kkearne/trapmux
+build_image = kkearne/trapmux_build
 container_trapmux = trapmux
 configuration_path_trapmux = /Users/kellskearney/go/src/trapmux/tools
 docker_tag_clickhouse = kkearne/clickhouse
@@ -13,17 +14,18 @@ container_clickhouse = clickhouse
 # ----  Docker: trapmux  ----------------------------
 .PHONY: trapmux
 trapmux:
-	DOCKER_BUILD=0 docker build -t $(docker_tag_trapmux) -f tools/docker/Dockerfile .
+	DOCKER_BUILD=0 docker build -t $(build_image) -f Dockerfile .
 
 trapmux_aws:
 	DOCKER_BUILD=0 docker build -t $(docker_tag_trapmux) -f tools/docker/Dockerfile.amazonlinux .
 
 run:
-	docker run --name $(container_trapmux) -v $(configuration_path):/opt/trapmux/etc -p 162:162 -p 5080:80 $(docker_tag_trapmux)
+	#docker run --platform linux/amd64 --name trapmux_build $(build_image)
+	docker run --name trapmux_build $(build_image)
 
 stop:
-	docker stop $(container_trapmux)
-	docker rm $(container_trapmux)
+	-docker stop trapmux_build
+	-docker rm trapmux_build
 
 pull:
 	docker pull $(image)
