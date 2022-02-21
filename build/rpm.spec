@@ -43,6 +43,11 @@ install -m 644 build/trapmux.json %{buildroot}/opt/%{name}/etc
 
 mkdir -p %{buildroot}/opt/%{name}/log
 
+mkdir -p %{buildroot}/opt/%{name}/plugins/metrics
+for plugin in `ls -1 txPlugins/metrics/*.so`; do
+    install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/metrics
+done
+
 mkdir -p %{buildroot}/opt/%{name}/plugins/actions
 for plugin in `ls -1 txPlugins/actions/*.so`; do
     install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/actions
@@ -70,6 +75,7 @@ done
 /opt/%{name}/bin/trapmux
 %config(noreplace) /opt/%{name}/etc/trapmux.json
 /opt/%{name}/README.md
+/opt/%{name}/plugins/metrics/*.so
 /opt/%{name}/plugins/actions/*.so
 /opt/%{name}/plugins/generators/*.so
 /opt/%{name}/schemas/*.json
