@@ -73,6 +73,9 @@ done
 %dir /opt/%{name}/plugins/generators
 %dir /opt/%{name}/captured
 /opt/%{name}/bin/trapmux
+/opt/%{name}/bin/trapbench
+/opt/%{name}/bin/traplay
+/opt/%{name}/bin/process_csv_data.sh
 %config(noreplace) /opt/%{name}/etc/trapmux.json
 /opt/%{name}/README.md
 /opt/%{name}/plugins/metrics/*.so
