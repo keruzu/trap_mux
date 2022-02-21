@@ -11,7 +11,7 @@ container_clickhouse = clickhouse
 
 
 build:
-	cd cmds && make
+	cd cmds && ./buildall.sh
 
 build_all: plugins build
 
