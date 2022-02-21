@@ -32,6 +32,9 @@ install -m 750 cmds/traplay/traplay %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/trapbench/trapbench %{buildroot}/opt/%{name}/bin
 install -m 750 build/process_csv_data.sh %{buildroot}/opt/%{name}/bin
 
+mkdir -p %{buildroot}/opt/%{name}/clickhouse/exported
+mkdir -p %{buildroot}/opt/%{name}/captured
+
 mkdir -p %{buildroot}/opt/%{name}/schemas
 install -m 644 schemas/*.json %{buildroot}/opt/%{name}/schemas
 
@@ -41,12 +44,12 @@ install -m 644 build/trapmux.json %{buildroot}/opt/%{name}/etc
 mkdir -p %{buildroot}/opt/%{name}/log
 
 mkdir -p %{buildroot}/opt/%{name}/plugins/actions
-for plugin in `ls -1 plugins/actions/*/*.so`; do
+for plugin in `ls -1 txPlugins/actions/*/*.so`; do
     install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/actions
 done
 
 mkdir -p %{buildroot}/opt/%{name}/plugins/generators
-for plugin in `ls -1 plugins/generators/*/*.so`; do
+for plugin in `ls -1 txPlugins/generators/*/*.so`; do
     install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/generators
 done
 
@@ -65,7 +68,7 @@ done
 %dir /opt/%{name}/plugins/generators
 %dir /opt/%{name}/captured
 /opt/%{name}/bin/trapmux
-%config(noreplace) /opt/%{name}/etc/trapmux.yml
+%config(noreplace) /opt/%{name}/etc/trapmux.json
 /opt/%{name}/README.md
 /opt/%{name}/plugins/actions/*.so
 /opt/%{name}/plugins/generators/*.so
