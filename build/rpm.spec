@@ -23,17 +23,17 @@ else
 fi
 
 mkdir -p %{buildroot}%{_sysconfdir}/systemd/system
-install -m 750 tools/%{name}.service %{buildroot}%{_sysconfdir}/systemd/system
+install -m 750 build/%{name}.service %{buildroot}%{_sysconfdir}/systemd/system
 
 mkdir -p %{buildroot}/opt/%{name}/bin
 install -m 644 README.md %{buildroot}/opt/%{name}
 install -m 750 trapmux %{buildroot}/opt/%{name}/bin
-install -m 750 tools/process_csv_data.sh %{buildroot}/opt/%{name}/bin
+install -m 750 build/process_csv_data.sh %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/traplay/traplay %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/trapbench/trapbench %{buildroot}/opt/%{name}/bin
 
 mkdir -p %{buildroot}/opt/%{name}/etc
-install -m 644 tools/trapmux.yml %{buildroot}/opt/%{name}/etc
+install -m 644 build/trapmux.json %{buildroot}/opt/%{name}/etc
 
 mkdir -p %{buildroot}/opt/%{name}/log
 

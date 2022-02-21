@@ -12,7 +12,10 @@ COPY ./root_vimrc /root/.vimrc
 WORKDIR /root
 RUN curl -LO https://dl.google.com/go/go1.17.2.linux-amd64.tar.gz && tar -C /usr/local -xzf go1.17.7.linux-arm64.tar.gz
 RUN rpmdev-setuptree
-WORKDIR /root/rpmbuild/SOURCES
+WORKDIR /root/rpmbuild/BUILDROOT
 RUN git clone https://github.com/keruzu/trapmux.git
+WORKDIR /root/rpmbuild/BUILDROOT/trapmux
+RUN make build_all
+RUN rpmbuild -ba build/rpm.spec
 CMD ["sleep", "5000"]
 
