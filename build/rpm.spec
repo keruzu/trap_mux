@@ -25,6 +25,9 @@ install -m 644 README.md %{buildroot}/opt/%{name}
 
 pwd
 ls
+ls cmds
+ls cmds/trapmux
+# Install binaries
 
 install -m 750 cmds/trapmux/trapmux %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/traplay/traplay %{buildroot}/opt/%{name}/bin

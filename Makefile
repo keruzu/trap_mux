@@ -32,7 +32,7 @@ fmt:
 	git commit -m "gofmt" -a
 
 rpm: build
-	rpmbuild -ba tools/rpm.spec
+	rpmbuild -bb tools/rpm.spec
 
 gosec:
 	gosec -exclude=G107 ./...
