@@ -7,6 +7,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	pluginMeta "github.com/keruzu/trapmux/txPlugins"
 
@@ -61,12 +62,20 @@ func (p prometheusStats) Report() (string, error) {
 // exposeMetrics
 // Allow Prometheus to gather current performance metrics via /metrics URL
 func exposeMetrics(pluginLog *zerolog.Logger, endpoint string, listenAddress string) {
-	server := http.NewServeMux()
-	server.Handle(endpoint, promhttp.Handler())
-	err := http.ListenAndServe(listenAddress, server)
-        if err != nil {
-            pluginLog.Error().Str("endpoint", endpoint).Str("listen_address", listenAddress).Msg("Prometheus metrics exporter unable to start HTTP service")
-        }
+	mux := http.NewServeMux()
+	mux.Handle(endpoint, promhttp.Handler())
+	server := &http.Server{
+		Addr:              listenAddress,
+		Handler:           mux,
+		ReadTimeout:       5 * time.Second,
+		ReadHeaderTimeout: 5 * time.Second,
+		WriteTimeout:      5 * time.Second,
+		IdleTimeout:       90 * time.Second,
+	}
+	err := server.ListenAndServe()
+	if err != nil {
+		pluginLog.Error().Str("endpoint", endpoint).Str("listen_address", listenAddress).Msg("Prometheus metrics exporter unable to start HTTP service")
+	}
 }
 
 var MetricPlugin prometheusStats
