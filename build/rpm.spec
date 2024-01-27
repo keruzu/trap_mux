@@ -22,6 +22,10 @@ install -m 750 build/%{name}.service %{buildroot}%{_sysconfdir}/systemd/system
 
 mkdir -p %{buildroot}/opt/%{name}/bin
 install -m 644 README.md %{buildroot}/opt/%{name}
+
+pwd
+ls
+
 install -m 750 cmds/trapmux/trapmux %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/traplay/traplay %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/trapbench/trapbench %{buildroot}/opt/%{name}/bin
@@ -38,19 +42,11 @@ install -m 644 build/trapmux.json %{buildroot}/opt/%{name}/etc
 
 mkdir -p %{buildroot}/opt/%{name}/log
 
-mkdir -p %{buildroot}/opt/%{name}/plugins/metrics
-for plugin in `ls -1 txPlugins/metrics/*.so`; do
-    install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/metrics
-done
-
-mkdir -p %{buildroot}/opt/%{name}/plugins/actions
-for plugin in `ls -1 txPlugins/actions/*.so`; do
-    install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/actions
-done
-
-mkdir -p %{buildroot}/opt/%{name}/plugins/generators
-for plugin in `ls -1 txPlugins/generators/*.so`; do
-    install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/generators
+for PLUGINTYPE in metrics actions generators ; do
+    mkdir -p %{buildroot}/opt/%{name}/plugins/$PLUGINTYPE
+    for plugin in `ls -1 txPlugins/$PLUGINTYPE/*.so`; do
+        install -m 750 $plugin %{buildroot}/opt/%{name}/plugins/$PLUGINTYPE
+    done
 done
 
 %files
