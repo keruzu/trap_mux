@@ -15,12 +15,7 @@ and process SNMP v1, v2c, or v3 traps.
 # Ummm..... We'll do that outside for the moment
 
 %install
-if [ -n "$CODEBUILD_SRC_DIR" ] ; then
-    # AWS CodeBuild source directory
-    cd $CODEBUILD_SRC_DIR
-else
-    cd trapmux
-fi
+cd ${RPM_SOURCE_DIR}
 
 mkdir -p %{buildroot}%{_sysconfdir}/systemd/system
 install -m 750 build/%{name}.service %{buildroot}%{_sysconfdir}/systemd/system

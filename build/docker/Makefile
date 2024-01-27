@@ -1,7 +1,7 @@
 
 BUILDARCH=x86_64
 TARGET=trapmux
-image = centos:7
+image = almalinux:minimal
 docker_tag_trapmux = kkearne/trapmux
 build_image = kkearne/trapmux_build
 container_trapmux = trapmux
