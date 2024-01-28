@@ -1,5 +1,5 @@
 Name: trapmux
-Version: 0.9.6
+Version: 0.9.7
 Release: 1
 License: MIT License
 Summary: SNMP trap receiver and forwarder to multiple destinations
@@ -24,12 +24,7 @@ install -m 750 build/%{name}.service %{buildroot}%{_sysconfdir}/systemd/system
 mkdir -p %{buildroot}/opt/%{name}/bin
 install -m 644 README.md %{buildroot}/opt/%{name}
 
-pwd
-ls
-ls cmds
-ls cmds/trapmux
 # Install binaries
-
 install -m 750 cmds/trapmux/trapmux %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/traplay/traplay %{buildroot}/opt/%{name}/bin
 install -m 750 cmds/trapbench/trapbench %{buildroot}/opt/%{name}/bin
