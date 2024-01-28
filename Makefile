@@ -10,6 +10,7 @@ container_clickhouse = clickhouse
 #configuration_path_clickhouse = /Users/kellskearney/go/src/trapmux/tools
 
 
+.PHONY: build
 build:
 	cd cmds && ./buildall.sh
 
