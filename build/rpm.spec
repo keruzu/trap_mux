@@ -12,7 +12,8 @@ log, and forward SNMP traps to zero or mulitple destinations.  It can receive
 and process SNMP v1, v2c, or v3 traps.  
 
 %build
-# Ummm..... We'll do that outside for the moment
+cd ${RPM_SOURCE_DIR}
+make build_all
 
 %install
 cd ${RPM_SOURCE_DIR}

@@ -14,7 +14,6 @@ RUN rpmdev-setuptree
 WORKDIR /root/rpmbuild/BUILDROOT
 RUN git clone https://github.com/keruzu/trapmux.git
 WORKDIR /root/rpmbuild/BUILDROOT/trapmux
-RUN make build_all
 RUN rpmbuild -ba build/rpm.spec  --define "_sourcedir ${PWD}"
 CMD ["sleep", "5000"]
 
